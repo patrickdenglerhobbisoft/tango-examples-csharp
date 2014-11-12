@@ -1,0 +1,19 @@
+Any raw as.Sets you want to be deployed with your application can be placed in
+this directory (and child directories) and given a Build Action of "AndroidAs.Set".
+
+These files will be deployed with you package and will be accessible using Android's
+As.SetManager, like this:
+
+public class ReadAs.Set : Activity
+{
+	protected override void OnCreate (Bundle bundle)
+	{
+		base.OnCreate (bundle);
+
+		InputStream input = As.Sets.Open ("my_as.Set.txt");
+	}
+}
+
+Additionally, some Android functions will automatically load as.Set files:
+
+Typeface tf = Typeface.CreateFromAs.Set (Context.As.Sets, "fonts/samplefont.ttf");

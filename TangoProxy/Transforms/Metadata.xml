@@ -1,0 +1,9 @@
+<metadata>
+  <!--
+  This sample removes the class: Android.support.v4.Content.AsyncTaskLoader.LoadTask:
+  <remove-node path="/api/package[@name='Android.support.v4.Content']/class[@name='AsyncTaskLoader.LoadTask']" />
+  
+  This sample removes the method: Android.support.v4.Content.CursorLoader.loadInBackground:
+  <remove-node path="/api/package[@name='Android.support.v4.Content']/class[@name='CursorLoader']/method[@name='loadInBackground']" />
+  -->
+</metadata>
