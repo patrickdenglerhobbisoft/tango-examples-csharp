@@ -9,15 +9,15 @@
       http://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed On an "AS IS" BASIS,
+   distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
 <resources>
 
-  <string name="app_name">Project Tango - Java Area Description</string>
-  <string name="menu_name">Java Area Description</string>
+  <string name="app_name">Project Tango - CSharp Area Description</string>
+  <string name="menu_name">CSharp Area Description</string>
   <string name="service_version">"Tango service version: "</string>
   <string name="app_version">"App version: "</string>
   <string name="tango_event">"Tango system event: "</string>
@@ -33,7 +33,7 @@
   <string name="third_person">Third</string>
   <string name="top_down">Top</string>
   <string name="start">Start</string>
-  <string name=".Set_name_dialogTitle">Set the ADF name</string>
+  <string name="set_name_dialogTitle">Set the ADF name</string>
   <string name="cancel">Cancel</string>
   <string name="save_adf">Save ADF</string>
   <string name="name">Name</string>
@@ -58,13 +58,13 @@
   <string name="number_of_adfs">"No of ADFs: "</string>
   <string name="na">"N/A"</string>
   <string name="learningmode_off">"Learning mode off"</string>
-  <string name="learningmode_on">"Learning mode On"</string>
-  <string name="loadadf_on">"Load ADF On"</string>
+  <string name="learningmode_on">"Learning mode on"</string>
+  <string name="loadadf_on">"Load ADF on"</string>
   <string name="loadadf_off">"Load ADF off"</string>
   <string name="pose_initializing">"initializing"</string>
   <string name="pose_valid">"valid"</string>
   <string name="pose_invalid">"invalid"</string>
-  <string name="PoseUnknownN">"unknown"</string>
+  <string name="pose_unknown">"unknown"</string>
   <string name="latest_adf_is">", Latest ADF is: "</string>
 
   <string-array name="SetDialogMenuItemsAPISpace">

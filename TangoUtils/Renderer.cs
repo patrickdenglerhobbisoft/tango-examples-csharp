@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 
 /*
  * Copyright 2014 HobbiSoft. All Rights Reserved.
@@ -18,12 +18,11 @@
 
 namespace com.projecttango.tangoutils
 {
-
+    using System;
     using Log = Android.Util.Log;
     using Com.Google.Atap.Tangoservice;
-    using GLES20 = Android.Opengl.GLES20;
-    using Matrix = Android.Opengl.Matrix;
-
+    using Android.Opengl;
+    
 
     using Android.Views;
     public class Renderer : Java.Lang.Object
@@ -57,7 +56,7 @@ namespace com.projecttango.tangoutils
 		private float mPreviousTouchY;
 		private float mTouch1X, mTouch2X, mTouch1Y, mTouch2Y, mTouchStartDistance, mTouchMoveDistance, mStartCameraRadius;
 
-		public Renderer():base()
+		public Renderer()
 		{
 			mModelMatCalculator = new ModelMatCalculator();
 			mRotationX = (float) Math.PI / 4;
@@ -100,7 +99,7 @@ namespace com.projecttango.tangoutils
 				Matrix.SetLookAtM(mViewMatrix, 0, mDevicePosition[0] + mCameraPosition[0], mCameraPosition[1] + mDevicePosition[1], mCameraPosition[2] + mDevicePosition[2], mDevicePosition[0], mDevicePosition[1], mDevicePosition[2], 0f, 1f, 0f);
 				break;
 			case TOP_DOWN:
-				// Matrix.SetIdentityM(mViewMatrix, 0);
+				Matrix.SetIdentityM(mViewMatrix, 0);
 				Matrix.SetLookAtM(mViewMatrix, 0, mDevicePosition[0] + mCameraPosition[0], mCameraPosition[1], mCameraPosition[2] + mDevicePosition[2], mDevicePosition[0] + mCameraPosition[0], mCameraPosition[1] - 5, mCameraPosition[2] + mDevicePosition[2], 0f, 0f, -1f);
 				break;
 			default:

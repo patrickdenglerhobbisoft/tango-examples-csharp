@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using Com.Google.Atap.Tangoservice;
 
-namespace com.projecttango.areadescriptionjava
+using Com.Google.Atap.Tangoservice;
+namespace com.projecttango.areadescriptioncsharp
 {
 
     
@@ -56,7 +56,7 @@ namespace com.projecttango.areadescriptionjava
          
 
 			View dialogView = inflator.Inflate(Resource.Layout.set_name_dialog, null);
-			Dialog.SetTitle(_string._Set_name_dialogTitle);
+			Dialog.SetTitle(Resource.String.set_name_dialogTitle);
             mNameEditText = (EditText)dialogView.FindViewById(Resource.Id.name);
             mUUIDTextView = (TextView)dialogView.FindViewById(Resource.Id.uuidDisplay);
             dialogView.FindViewById(Resource.Id.Ok).Click += OnClick;

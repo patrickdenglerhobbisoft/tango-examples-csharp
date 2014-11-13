@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Com.Google.Atap.Tangoservice;
+﻿
 /*
  * Copyright 2014 HobbiSoft. All Rights Reserved.
  *
@@ -17,11 +15,11 @@ using Com.Google.Atap.Tangoservice;
  * limitations under the License.
  */
 
-namespace com.projecttango.Pointcloudjava
+namespace com.projecttango.pointcloudcsharp
 {
-    using PointCloud;
+    using System;
+    using System.Collections.Generic;
     using Com.Google.Atap.Tangoservice;
-
     using Android.Opengl;
     using Android.Util;
     using Android.App;
@@ -30,12 +28,10 @@ namespace com.projecttango.Pointcloudjava
     using Android.Views;
     using Android.OS;
     using Android.Widget;
-    
     using Java.IO;
-
 	using OnTangoUpdateListener = Tango.IOnTangoUpdateListener;
-
     using IOnClickListener = Android.Views.View.IOnClickListener;
+    using Com.Google.Atap.Tangoservice;
 
 	/// <summary>
 	/// Main Activity class for the Point Cloud Sample. Handles the connection to the
@@ -43,6 +39,14 @@ namespace com.projecttango.Pointcloudjava
 	/// Layout views. OpenGL rendering logic is delegated to the <seealso cref="PCrenderer"/>
 	/// class.
 	/// </summary>
+     [Activity(Label = "JPointCloud"
+        , MainLauncher = true
+        , Icon = "@drawable/icon"
+        , Theme = "@style/Theme.Splash"
+        , AlwaysRetainTaskState = true
+        , LaunchMode = Android.Content.PM.LaunchMode.SingleInstance
+        , ScreenOrientation = ScreenOrientation.SensorLandscape
+        , ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
 	public class JPointCloud : Activity, IOnClickListener
 	{
 
@@ -71,7 +75,7 @@ namespace com.projecttango.Pointcloudjava
 		private Button mFirstPersonButton;
 		private Button mThirdPersonButton;
 		private Button mTopDownButton;
-
+        private List<TangoCoordinateFramePair> framePairs = new List<TangoCoordinateFramePair>();
 		private int count;
 		private float mDeltaTime;
 		private float mPosePreviousTimeStamp;
@@ -83,7 +87,7 @@ namespace com.projecttango.Pointcloudjava
 		protected  override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
-			//ContentView = Resource.Layout.activity_jpoint_cloud;  // TODO CONTENTVIEW
+			SetContentView( Resource.Layout.activity_jpoint_cloud);  
 			Title = GetString(Resource.String.app_name);
 
 			mPoseTextView = (TextView) FindViewById(Resource.Id.pose);
@@ -245,7 +249,7 @@ namespace com.projecttango.Pointcloudjava
 			{
 				Toast.MakeText(ApplicationContext, Resource.String.TangoError, Android.Widget.ToastLength.Short).Show();
 			}
-			mRenderer.ModelMatCalculator.SetDevice2IMUMatrix(device2IMUPose.GetTranslationAsFloats(), device2IMUPose.GetTranslationAsFloats());
+			mRenderer.ModelMatCalculator.SetDevice2IMUMatrix(device2IMUPose.GetTranslationAsFloats(), device2IMUPose.GetRotationAsFloats());
 
 			// Set color camera to imu matrix in Model Matrix Calculator.
 			TangoPoseData color2IMUPose = new TangoPoseData();
@@ -260,98 +264,68 @@ namespace com.projecttango.Pointcloudjava
 			{
 				Toast.MakeText(ApplicationContext, Resource.String.TangoError, Android.Widget.ToastLength.Short).Show();
 			}
-			mRenderer.ModelMatCalculator.SetColorCamera2IMUMatrix(color2IMUPose.GetTranslationAsFloats(), color2IMUPose.GetTranslationAsFloats());
+			mRenderer.ModelMatCalculator.SetColorCamera2IMUMatrix(color2IMUPose.GetTranslationAsFloats(), color2IMUPose.GetRotationAsFloats());
 		}
 
 		private void SetTangoListeners()
 		{
 			// Configure the Tango coordinate frame pair
 
-           // Original line in class:  final java.Util.ArrayList<com.google.atap.tangoservice.TangoCoordinateFramePair> framePairs = new java.Util.ArrayList<com.google.atap.tangoservice.TangoCoordinateFramePair>();
-			List<TangoCoordinateFramePair> framePairs = new List<TangoCoordinateFramePair>();
 			framePairs.Add(new TangoCoordinateFramePair(TangoPoseData.CoordinateFrameStartOfService, TangoPoseData.CoordinateFrameDevice));
 			// Listen for new Tango data
-			mTango.ConnectListener(framePairs, new OnTangoUpdateListenerAnonymousInnerClassHelper(this, framePairs));
+
+            var listener = new TangoProxy.TangoListener(this);
+            listener.OnPoseAvailableCallback = OnPoseAvailable;
+            listener.OnXyzIjAvailableCallBack = OnXyzIjAvailable;
+            listener.OnTangoEventCallBack = OnTangoEvent;
+           
+            mTango.ConnectListener(framePairs, listener);
+          
 		}
-
-		private class OnTangoUpdateListenerAnonymousInnerClassHelper : Tango.IOnTangoUpdateListener
-		{
-			private readonly JPointCloud outerInstance;
-
-			private List<TangoCoordinateFramePair> framePairs;
-
-			public OnTangoUpdateListenerAnonymousInnerClassHelper(JPointCloud outerInstance, List<TangoCoordinateFramePair> framePairs)
-			{
-				this.outerInstance = outerInstance;
-				this.framePairs = framePairs;
-			}
-
-
-//JAVA TO C# CONVERTER WARNING: 'final' parameters are not available in .NET:
-           // Original line in class:  @Override public void OnPoseAvailable(final com.google.atap.tangoservice.TangoPoseData pose)
 			public void OnPoseAvailable(TangoPoseData pose)
 			{
-				outerInstance.mDeltaTime = (float)(pose.Timestamp - outerInstance.mPosePreviousTimeStamp) * SECS_TO_MILLI;
-				outerInstance.mPosePreviousTimeStamp = (float) pose.Timestamp;
-				outerInstance.count++;
-				outerInstance.mRenderer.ModelMatCalculator.updateModelMatrix(pose.GetTranslationAsFloats(), pose.GetTranslationAsFloats());
-				outerInstance.mRenderer.updateViewMatrix();
-				outerInstance.mGLView.RequestRender();
+				mDeltaTime = (float)(pose.Timestamp - mPosePreviousTimeStamp) * SECS_TO_MILLI;
+				mPosePreviousTimeStamp = (float) pose.Timestamp;
+				count++;
+				mRenderer.ModelMatCalculator.updateModelMatrix(pose.GetTranslationAsFloats(), pose.GetRotationAsFloats());
+				mRenderer.updateViewMatrix();
+				mGLView.RequestRender();
 				// Update the UI with TangoPose information
-				System.Threading.Thread.CurrentThread.Start(new RunnableAnonymousInnerClassHelper(this, pose));
-			}
-
-			private class RunnableAnonymousInnerClassHelper 
-			{
-				private readonly OnTangoUpdateListenerAnonymousInnerClassHelper outerInstance;
-
-				private TangoPoseData pose;
-
-				public RunnableAnonymousInnerClassHelper(OnTangoUpdateListenerAnonymousInnerClassHelper outerInstance, TangoPoseData pose)
-				{
-					this.outerInstance = outerInstance;
-					this.pose = pose;
-				}
-
-				public  void run()
-				{
-					DecimalFormat threeDec = new DecimalFormat("0.000");
-					string translationString = "[" + threeDec.format(pose.Translation[0]) + ", " + threeDec.format(pose.Translation[1]) + ", " + threeDec.format(pose.Translation[2]) + "] ";
+			    RunOnUiThread(() =>
+                {
+                    string translationString = "[" + threeDec.format(pose.Translation[0]) + ", " + threeDec.format(pose.Translation[1]) + ", " + threeDec.format(pose.Translation[2]) + "] ";
 					string quaternionString = "[" + threeDec.format(pose.Rotation[0]) + ", " + threeDec.format(pose.Rotation[1]) + ", " + threeDec.format(pose.Rotation[2]) + ", " + threeDec.format(pose.Rotation[3]) + "] ";
 
 					// Display pose data On screen in TextViews
-					outerInstance.outerInstance.mPoseTextView.Text = translationString;
-					outerInstance.outerInstance.mQuatTextView.Text = quaternionString;
-					outerInstance.outerInstance.mPoseCountTextView.Text = Convert.ToString(outerInstance.outerInstance.count);
-					outerInstance.outerInstance.mDeltaTextView.Text = threeDec.format(outerInstance.outerInstance.mDeltaTime);
+					mPoseTextView.Text = translationString;
+					mQuatTextView.Text = quaternionString;
+					mPoseCountTextView.Text = Convert.ToString(count);
+					mDeltaTextView.Text = threeDec.format(mDeltaTime);
 					if (pose.StatusCode == TangoPoseData.PoseValid)
 					{
-						outerInstance.outerInstance.mPoseStatusTextView.Text = "Valid";
+						mPoseStatusTextView.Text = "Valid";
 					}
 					else if (pose.StatusCode == TangoPoseData.PoseInvalid)
 					{
-						outerInstance.outerInstance.mPoseStatusTextView.Text = "Invalid";
+						mPoseStatusTextView.Text = "Invalid";
 					}
 					else if (pose.StatusCode == TangoPoseData.PoseInitializing)
 					{
-						outerInstance.outerInstance.mPoseStatusTextView.Text = "Initializing";
+						mPoseStatusTextView.Text = "Initializing";
 					}
 					else if (pose.StatusCode == TangoPoseData.PoseUnknown)
 					{
-						outerInstance.outerInstance.mPoseStatusTextView.Text = "Unknown";
+						mPoseStatusTextView.Text = "Unknown";
 					}
-				}
-			}
-
-//JAVA TO C# CONVERTER WARNING: 'final' parameters are not available in .NET:
-           // Original line in class:  @Override public void OnXyzIjAvailable(final com.google.atap.tangoservice.TangoXyzIjData xyzIj)
+				 });
+            }
+			
 			public void  OnXyzIjAvailable(TangoXyzIjData xyzIj)
 			{
-				outerInstance.mCurrentTimeStamp = (float) xyzIj.Timestamp;
+				mCurrentTimeStamp = (float) xyzIj.Timestamp;
 
-           // Original line in class:  final float frameDelta = (mCurrentTimeStamp - mXyIjPreviousTimeStamp) * SECS_TO_MILLI;
-				float frameDelta = (outerInstance.mCurrentTimeStamp - outerInstance.mXyIjPreviousTimeStamp) * SECS_TO_MILLI;
-				outerInstance.mXyIjPreviousTimeStamp = outerInstance.mCurrentTimeStamp;
+				float frameDelta = (mCurrentTimeStamp - mXyIjPreviousTimeStamp) * SECS_TO_MILLI;
+				mXyIjPreviousTimeStamp = mCurrentTimeStamp;
 				byte[] buffer = new byte[xyzIj.XyzCount * 3 * 4];
 				FileInputStream fileStream = new FileInputStream(xyzIj.XyzParcelFileDescriptor.FileDescriptor);
 				try
@@ -366,11 +340,11 @@ namespace com.projecttango.Pointcloudjava
 				}
 				try
 				{
-					TangoPoseData pointCloudPose = outerInstance.mTango.GetPoseAtTime(outerInstance.mCurrentTimeStamp, framePairs[0]);
+					TangoPoseData pointCloudPose = mTango.GetPoseAtTime(mCurrentTimeStamp, framePairs[0]);
 
-					outerInstance.mRenderer.PointCloud.UpdatePoints(buffer, xyzIj.XyzCount);
-					outerInstance.mRenderer.ModelMatCalculator.updatePointCloudModelMatrix(pointCloudPose.GetTranslationAsFloats(), pointCloudPose.GetTranslationAsFloats());
-					outerInstance.mRenderer.PointCloud.ModelMatrix = outerInstance.mRenderer.ModelMatCalculator.PointCloudModelMatrixCopy;
+					mRenderer.PointCloud.UpdatePoints(buffer, xyzIj.XyzCount);
+					mRenderer.ModelMatCalculator.updatePointCloudModelMatrix(pointCloudPose.GetTranslationAsFloats(), pointCloudPose.GetRotationAsFloats());
+					mRenderer.PointCloud.ModelMatrix = mRenderer.ModelMatCalculator.PointCloudModelMatrixCopy;
 				}
 				catch (TangoErrorException)
 				{
@@ -384,70 +358,26 @@ namespace com.projecttango.Pointcloudjava
 				// Must run UI changes On the UI thread. Running in the Tango
 				// service thread
 				// will result in an error.
-				System.Threading.Thread.CurrentThread.Start(new RunnableAnonymousInnerClassHelper2(this, xyzIj, frameDelta));
+				RunOnUiThread(() => 
+                {
+                    mPointCountTextView.Text = Convert.ToString(xyzIj.XyzCount);
+				    mFrequencyTextView.Text = "" + threeDec.format(frameDelta);
+				    mAverageZTextView.Text = "" + threeDec.format(mRenderer.PointCloud.AverageZ);
+                });
 			}
 
-			private class RunnableAnonymousInnerClassHelper2 
-			{
-				private readonly OnTangoUpdateListenerAnonymousInnerClassHelper outerInstance;
+		
 
-				private TangoXyzIjData xyzIj;
-				private float frameDelta;
-
-				public RunnableAnonymousInnerClassHelper2(OnTangoUpdateListenerAnonymousInnerClassHelper outerInstance, TangoXyzIjData xyzIj, float frameDelta)
-				{
-					this.outerInstance = outerInstance;
-					this.xyzIj = xyzIj;
-					this.frameDelta = frameDelta;
-					threeDec = new DecimalFormat("0.000");
-				}
-
-				internal DecimalFormat threeDec;
-
-				public  void run()
-				{
-					// Display number of points in the point cloud
-					outerInstance.outerInstance.mPointCountTextView.Text = Convert.ToString(xyzIj.XyzCount);
-					outerInstance.outerInstance.mFrequencyTextView.Text = "" + threeDec.format(frameDelta);
-					outerInstance.outerInstance.mAverageZTextView.Text = "" + threeDec.format(outerInstance.outerInstance.mRenderer.PointCloud.AverageZ);
-				}
-			}
-
-//JAVA TO C# CONVERTER WARNING: 'final' parameters are not available in .NET:
-           // Original line in class:  @Override public void OnTangoEvent(final com.google.atap.tangoservice.TangoEvent event)
             public void OnTangoEvent(TangoEvent args)
             {
-                System.Threading.Thread.CurrentThread.Start(new RunnableAnonymousInnerClassHelper3(this, args));
+                RunOnUiThread(() => 
+                {
+                    mTangoEventTextView.Text = args.EventKey + ": " + args.EventValue;
+                });
             }
 
-			private class RunnableAnonymousInnerClassHelper3 
-			{
-				private readonly OnTangoUpdateListenerAnonymousInnerClassHelper outerInstance;
-
-				private TangoEvent args;
-
-				public RunnableAnonymousInnerClassHelper3(OnTangoUpdateListenerAnonymousInnerClassHelper outerInstance, TangoEvent args)
-				{
-					this.outerInstance = outerInstance;
-					this.args = args;
-				}
-
-				public  void run()
-				{
-					outerInstance.outerInstance.mTangoEventTextView.Text = args.EventKey + ": " + args.EventValue;
-				}
-			}
-
-            public IntPtr Handle
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            public void Dispose()
-            {
-                throw new NotImplementedException();
-            }
-        }
+		
+       
 	}
 
 }

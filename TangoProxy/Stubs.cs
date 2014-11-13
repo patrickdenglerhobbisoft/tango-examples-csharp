@@ -12,21 +12,13 @@ using Android.Widget;
 
 namespace Com.Google.Atap.Tangoservice
 {
-    public class DecimalFormat
+    public static class threeDec
     {
-        private string mFormatString;
-        public DecimalFormat(string FormatString="")
+        private  const string mFormatString= "{0:0.00}";
+       
+        public static String format(double number)
         {
-            if (FormatString == "")
-                mFormatString = "0.000";
-            else
-                this.mFormatString = FormatString;
-
-        }
-
-        public string format(double number)
-        {
-            return string.Format(mFormatString, number);
+            return String.Format(mFormatString, number);
        
         }
     }

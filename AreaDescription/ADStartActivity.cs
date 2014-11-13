@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace com.projecttango.areadescriptionjava
+namespace com.projecttango.areadescriptioncsharp
 {
     using Com.Google.Atap.Tangoservice;
     using Android.Content;
@@ -26,6 +26,17 @@ namespace com.projecttango.areadescriptionjava
     using id = Resource.Id;
     using Layout = Resource.Layout;
     using _string = Resource.String;
+
+    using Android.Content.PM;
+
+      [Activity(Label = "AreaDescription"
+        , MainLauncher = true
+        , Icon = "@drawable/icon"
+        , Theme = "@style/Theme.Splash"
+        , AlwaysRetainTaskState = true
+        , LaunchMode = Android.Content.PM.LaunchMode.SingleInstance
+        , ScreenOrientation = ScreenOrientation.SensorLandscape
+        , ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
 	public class ADStartActivity : Activity, View.IOnClickListener
 	{
 

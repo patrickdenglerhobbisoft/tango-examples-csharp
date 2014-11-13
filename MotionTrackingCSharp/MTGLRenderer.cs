@@ -58,7 +58,7 @@ namespace com.projecttango.motiontrackingcsharp
 			GLES20.GlClearColor(1f, 1f, 1f, 1.0f);
 			GLES20.GlEnable(GLES20.GlDepthTest);
 
-			// resetModelMatCalculator();
+			resetModelMatCalculator();
 			mCameraFrustum = new CameraFrustum();
 			mFloorGrid = new Grid();
 			mCameraFrustumAndAxis = new CameraFrustumAndAxis();

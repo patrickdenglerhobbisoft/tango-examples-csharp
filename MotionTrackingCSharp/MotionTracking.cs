@@ -48,30 +48,30 @@ namespace com.projecttango.motiontrackingcsharp
 	{
  
 		private static string TAG = typeof(MotionTracking).Name;
-      
+        static int SECS_TO_MILLISECS = 1000;
 		private Tango mTango;
 		private TangoConfig mConfig;
-		internal TextView mDeltaTextView;
-		internal TextView mPoseCountTextView;
-		internal TextView mPoseTextView;
-		internal TextView mQuatTextView;
-		internal TextView mPoseStatusTextView;
-		internal TextView mTangoServiceVersionTextView;
-		internal TextView mApplicationVersionTextView;
-		internal TextView mTangoEventTextView;
+        private TextView mDeltaTextView;
+        private TextView mPoseCountTextView;
+        private TextView mPoseTextView;
+        private TextView mQuatTextView;
+        private TextView mPoseStatusTextView;
+        private TextView mTangoServiceVersionTextView;
+        private TextView mApplicationVersionTextView;
+        private TextView mTangoEventTextView;
 		private Button mMotionResetButton;
-        internal float mPreviousTimeStamp;
-        internal int count;
-        internal float mDeltaTime;
-		internal bool mIsAutoRecovery;
-        internal MTGLRenderer mRenderer;
-        internal GLSurfaceView mGLView;
-        
+        private float mPreviousTimeStamp;
+        private int count;
+        private float mDeltaTime;
+        private bool mIsAutoRecovery;
+        private MTGLRenderer mRenderer;
+        private GLSurfaceView mGLView;
+        private  string _TAG;
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
             var layOut = Resource.Layout.activity_motion_tracking;
-            
+            _TAG = this.GetType().Name;
             SetContentView(layOut);
 			Intent intent = Intent;
             mIsAutoRecovery = intent.GetBooleanExtra(com.projecttango.motiontrackingcsharp.StartActivity.KEY_MOTIONTRACKING_AUTORECOVER, false);
@@ -165,14 +165,74 @@ namespace com.projecttango.motiontrackingcsharp
             List<TangoCoordinateFramePair> framePairs = new List<TangoCoordinateFramePair>();
             framePairs.Add(new TangoCoordinateFramePair(TangoPoseData.CoordinateFrameStartOfService, TangoPoseData.CoordinateFrameDevice));
             // Listen for new Tango data
-            var tangoListener = new TangoListener();
-            tangoListener.ParentActivity = this;
-            mTango.ConnectListener(framePairs, tangoListener);
+            var listener = new TangoProxy.TangoListener(this);
+            listener.OnPoseAvailableCallback = OnPoseAvailable;
+            listener.OnTangoEventCallBack = OnTangoEvent;
+
+            mTango.ConnectListener(framePairs, listener);
+        }
+
+        public void OnTangoEvent(TangoEvent args)
+        {
+            RunOnUiThread(() =>
+            {
+                mTangoEventTextView.Text = args.EventKey + ": " + args.EventValue;
+            });
         }
 
 
+        public void OnPoseAvailable(TangoPoseData pose)
+        {
+            RunOnUiThread(() =>
+            {
 
-        
+                // Log whenever Motion Tracking enters a n invalid state
+                if (!mIsAutoRecovery && (pose.StatusCode == TangoPoseData.PoseInvalid))
+                {
+                    Log.Wtf(this.GetType().Name, "Invalid State");
+                }
+                mDeltaTime = (float)(pose.Timestamp - mPreviousTimeStamp) * SECS_TO_MILLISECS;
+                mPreviousTimeStamp = (float)pose.Timestamp;
+                Log.Info(_TAG, "Delta Time is: " + mDeltaTime);
+                count++;
+                // Update the OpenGL renderable objects with the new Tango Pose
+                // data
+                if (mRenderer.Trajectory != null)
+                {
+                    float[] translation = pose.GetTranslationAsFloats();
+                    mRenderer.Trajectory.updateTrajectory(translation);
+                    mRenderer.ModelMatCalculator.updateModelMatrix(translation, pose.GetRotationAsFloats());
+                    mRenderer.updateViewMatrix();
+                    mGLView.RequestRender();
+                }
+
+                string translationString = "[" + threeDec.format(pose.Translation[0]) + ", " + threeDec.format(pose.Translation[1]) + ", " + threeDec.format(pose.Translation[2]) + "] ";
+                string quaternionString = "[" + threeDec.format(pose.Rotation[0]) + ", " + threeDec.format(pose.Rotation[1]) + ", " + threeDec.format(pose.Rotation[2]) + ", " + threeDec.format(pose.Rotation[3]) + "] ";
+
+                // Display pose data On screen in TextViews
+                mPoseTextView.Text = translationString;
+                mQuatTextView.Text = quaternionString;
+                mPoseCountTextView.Text = count.ToString();
+                mDeltaTextView.Text = threeDec.format(mDeltaTime);
+                if (pose.StatusCode == TangoPoseData.PoseValid)
+                {
+                    mPoseStatusTextView.Text = "Valid";
+                }
+                else if (pose.StatusCode == TangoPoseData.PoseInvalid)
+                {
+                    mPoseStatusTextView.Text = "Invalid";
+                }
+                else if (pose.StatusCode == TangoPoseData.PoseInitializing)
+                {
+                    mPoseStatusTextView.Text = "Initializing";
+                }
+                else if (pose.StatusCode == TangoPoseData.PoseUnknown)
+                {
+                    mPoseStatusTextView.Text = "Unknown";
+                }
+            });
+           
+        }
 
         void IDisposable.Dispose()
         {

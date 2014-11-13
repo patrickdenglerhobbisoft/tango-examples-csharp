@@ -111,7 +111,7 @@ namespace com.projecttango.tangoutils.renderables
 				dy = mVertexBuffer.Get(mVertexBuffer.Position() - 2) - translation[2];
 				dz = mVertexBuffer.Get(mVertexBuffer.Position() - 1) - (-translation[1]);
 			}
-			catch (System.IndexOutOfRangeException)
+			catch (Java.Lang.IndexOutOfBoundsException e)
 			{
 				mVertexBuffer.Put(new float[] {translation[0], translation[2], -translation[1]});
 				mTrajectoryCount++;

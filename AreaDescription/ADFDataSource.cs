@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿
 
 /*
  * Copyright 2014 HobbiSoft. All Rights Reserved.
@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-namespace com.projecttango.areadescriptionjava
+namespace com.projecttango.areadescriptioncsharp
 {
-
+    using System.Collections.Generic;
     using Com.Google.Atap.Tangoservice;
     using Tango = Com.Google.Atap.Tangoservice.Tango;
     using TangoAreaDescriptionMetaData = Com.Google.Atap.Tangoservice.TangoAreaDescriptionMetaData;
@@ -91,7 +91,7 @@ namespace com.projecttango.areadescriptionjava
 						Toast.MakeText(mContext,Resource.String.tango_error, Android.Widget.ToastLength.Short).Show();
 					}
                     var byteResult=metadata.Get("name");
-                    list[i] = StringHelperClass.NewString(byteResult);
+                    list[i] = StringHelper.NewString(byteResult);
                      
 				}
 				return list;

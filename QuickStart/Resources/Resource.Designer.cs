@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("com.projecttango.quickstartjava.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("com.projecttango.quickstartcsharp.Resource", IsApplication=true)]
 
-namespace com.projecttango.quickstartjava
+namespace com.projecttango.quickstartcsharp
 {
 	
 	

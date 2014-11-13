@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 /*
  * Copyright 2014 HobbiSoft. All Rights Reserved.
  *
@@ -16,12 +14,13 @@ using System.Collections.Generic;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using Com.Google.Atap.Tangoservice;
-using AreaDescription;
 
-namespace com.projecttango.areadescriptionjava
+
+
+namespace com.projecttango.areadescriptioncsharp
 {
-
+    using System;
+    using System.Collections.Generic;
     using Java.Lang;
     using Android.Opengl;
     using Android.Util;
@@ -32,11 +31,10 @@ namespace com.projecttango.areadescriptionjava
     
     using Android.OS;
     using Android.Widget;
-	using SetNameCommunicator = com.projecttango.areadescriptionjava.SetADFNameDialog.SetNameCommunicator;
-   
+	using SetNameCommunicator = com.projecttango.areadescriptioncsharp.SetADFNameDialog.SetNameCommunicator;
 
-    using Layout = Resource.Layout;
-    using _string = Resource.String;
+    using Com.Google.Atap.Tangoservice;
+
 
 	/// <summary>
 	/// Main Activity class for the Area Learning API Sample. Handles the connection
@@ -50,7 +48,13 @@ namespace com.projecttango.areadescriptionjava
 		private const int SECONDS_TO_MILLI = 1000;
 		private Tango mTango;
 		private TangoConfig mConfig;
-		private TextView mTangoEventTextView;
+        private TextView mTangoEventTextView;
+
+        public TextView TangoEventTextView
+        {
+            get { return mTangoEventTextView; }
+        
+        }
 		private TextView mStart2DeviceTranslationTextView;
 		private TextView mAdf2DeviceTranslationTextView;
 		private TextView mAdf2StartTranslationTextView;
@@ -91,45 +95,46 @@ namespace com.projecttango.areadescriptionjava
 		private bool mIsConstantSpaceRelocalize;
 		private string mCurrentUUID;
 
-		private ADRenderer mRenderer;
+		public ADRenderer mRenderer;
 		private GLSurfaceView mGLView;
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
-			//ContentView = R.Layout.activity_area_learning;   TODO: ContentView
+			SetContentView(Resource.Layout.activity_area_learning);
 
-            mTangoEventTextView = (TextView)FindViewById(R.id.tangoevent);
 
-			mAdf2DeviceTranslationTextView = (TextView) FindViewById(R.id.adf2devicePose);
-			mStart2DeviceTranslationTextView = (TextView) FindViewById(R.id.start2devicePose);
-			mAdf2StartTranslationTextView = (TextView) FindViewById(R.id.adf2startPose);
-			mAdf2DeviceQuatTextView = (TextView) FindViewById(R.id.adf2deviceQuat);
-			mStart2DeviceQuatTextView = (TextView) FindViewById(R.id.start2deviceQuat);
-			mAdf2StartQuatTextView = (TextView) FindViewById(R.id.adf2startQuat);
+            mTangoEventTextView = (TextView)FindViewById(Resource.Id.tangoevent);
 
-			mAdf2DevicePoseStatusTextView = (TextView) FindViewById(R.id.adf2deviceStatus);
-			mStart2DevicePoseStatusTextView = (TextView) FindViewById(R.id.start2deviceStatus);
-			mAdf2StartPoseStatusTextView = (TextView) FindViewById(R.id.adf2startStatus);
+			mAdf2DeviceTranslationTextView = (TextView) FindViewById(Resource.Id.adf2devicePose);
+			mStart2DeviceTranslationTextView = (TextView) FindViewById(Resource.Id.start2devicePose);
+			mAdf2StartTranslationTextView = (TextView) FindViewById(Resource.Id.adf2startPose);
+			mAdf2DeviceQuatTextView = (TextView) FindViewById(Resource.Id.adf2deviceQuat);
+			mStart2DeviceQuatTextView = (TextView) FindViewById(Resource.Id.start2deviceQuat);
+			mAdf2StartQuatTextView = (TextView) FindViewById(Resource.Id.adf2startQuat);
 
-			mAdf2DevicePoseCountTextView = (TextView) FindViewById(R.id.adf2devicePosecount);
-			mStart2DevicePoseCountTextView = (TextView) FindViewById(R.id.start2devicePosecount);
-			mAdf2StartPoseCountTextView = (TextView) FindViewById(R.id.adf2startPosecount);
+			mAdf2DevicePoseStatusTextView = (TextView) FindViewById(Resource.Id.adf2deviceStatus);
+			mStart2DevicePoseStatusTextView = (TextView) FindViewById(Resource.Id.start2deviceStatus);
+			mAdf2StartPoseStatusTextView = (TextView) FindViewById(Resource.Id.adf2startStatus);
 
-			mAdf2DevicePoseDeltaTextView = (TextView) FindViewById(R.id.adf2deviceDeltatime);
-			mStart2DevicePoseDeltaTextView = (TextView) FindViewById(R.id.start2deviceDeltatime);
-			mAdf2StartPoseDeltaTextView = (TextView) FindViewById(R.id.adf2startDeltatime);
+			mAdf2DevicePoseCountTextView = (TextView) FindViewById(Resource.Id.adf2devicePosecount);
+			mStart2DevicePoseCountTextView = (TextView) FindViewById(Resource.Id.start2devicePosecount);
+			mAdf2StartPoseCountTextView = (TextView) FindViewById(Resource.Id.adf2startPosecount);
 
-			mFirstPersonButton = (Button) FindViewById(R.id.first_person_button);
-			mThirdPersonButton = (Button) FindViewById(R.id.third_person_button);
-			mTopDownButton = (Button) FindViewById(R.id.top_down_button);
+			mAdf2DevicePoseDeltaTextView = (TextView) FindViewById(Resource.Id.adf2deviceDeltatime);
+			mStart2DevicePoseDeltaTextView = (TextView) FindViewById(Resource.Id.start2deviceDeltatime);
+			mAdf2StartPoseDeltaTextView = (TextView) FindViewById(Resource.Id.adf2startDeltatime);
 
-			mTangoServiceVersionTextView = (TextView) FindViewById(R.id.version);
-			mApplicationVersionTextView = (TextView) FindViewById(R.id.appversion);
-			mGLView = (GLSurfaceView) FindViewById(R.id.gl_surface_view);
+			mFirstPersonButton = (Button) FindViewById(Resource.Id.first_person_button);
+			mThirdPersonButton = (Button) FindViewById(Resource.Id.third_person_button);
+			mTopDownButton = (Button) FindViewById(Resource.Id.top_down_button);
 
-			mSaveAdf = (Button) FindViewById(R.id.saveAdf);
-			mUUIDTextView = (TextView) FindViewById(R.id.uuid);
+			mTangoServiceVersionTextView = (TextView) FindViewById(Resource.Id.version);
+			mApplicationVersionTextView = (TextView) FindViewById(Resource.Id.appversion);
+			mGLView = (GLSurfaceView) FindViewById(Resource.Id.gl_surface_view);
+
+			mSaveAdf = (Button) FindViewById(Resource.Id.saveAdf);
+			mUUIDTextView = (TextView) FindViewById(Resource.Id.uuid);
 
 			mSaveAdf.Visibility =  Android.Views.ViewStates.Gone;
 			// Set up button click listeners
@@ -213,81 +218,54 @@ namespace com.projecttango.areadescriptionjava
 			framePairs.Add(new TangoCoordinateFramePair(TangoPoseData.CoordinateFrameStartOfService, TangoPoseData.CoordinateFrameDevice));
 			framePairs.Add(new TangoCoordinateFramePair(TangoPoseData.CoordinateFrameAreaDescription, TangoPoseData.CoordinateFrameDevice));
 			framePairs.Add(new TangoCoordinateFramePair(TangoPoseData.CoordinateFrameAreaDescription, TangoPoseData.CoordinateFrameStartOfService));
-
-			mTango.ConnectListener(framePairs, new OnTangoUpdateListenerAnonymousInnerClassHelper(this));
+            var listener = new TangoProxy.TangoListener(this);
+            listener.OnPoseAvailableCallback = OnPoseAvailable;
+            listener.OnTangoEventCallBack = OnTangoEvent;
+     
+            mTango.ConnectListener(framePairs, listener);
 		}
 
-        private class OnTangoUpdateListenerAnonymousInnerClassHelper : Java.Lang.Object,Tango.IOnTangoUpdateListener
-		{
-			private readonly AreaDescription outerInstance;
 
-			public OnTangoUpdateListenerAnonymousInnerClassHelper(AreaDescription outerInstance)
-			{
-				this.outerInstance = outerInstance;
-			}
+        public void OnPoseAvailable(TangoPoseData pose)
+        {
 
-			public void OnXyzIjAvailable(TangoXyzIjData xyzij)
-			{
-				// Not using XyzIj data for this sample
-			}
+            // Update the text views with Pose info.
+            updateTextViewWith(pose);
+            bool updateRenderer = false;
+            if (mIsRelocalized)
+            {
+                if (pose.BaseFrame == TangoPoseData.CoordinateFrameAreaDescription && pose.TargetFrame == TangoPoseData.CoordinateFrameDevice)
+                {
+                    updateRenderer = true;
+                }
+            }
+            else
+            {
+                if (pose.BaseFrame == TangoPoseData.CoordinateFrameStartOfService && pose.TargetFrame == TangoPoseData.CoordinateFrameDevice)
+                {
+                    updateRenderer = true;
+                }
+            }
 
-            public void OnTangoEvent(TangoEvent args)
-			{
-				System.Threading.Thread.CurrentThread.Start( (new RunnableAnonymousInnerClassHelper(this, args))); // TODO: Check to see if thread fires
-			}
+            // Update the trajectory, model matrix, and view matrix, then
+            // render the scene again
+            if (updateRenderer && (mRenderer.Trajectory != null))
+            {
+                float[] translation = pose.GetTranslationAsFloats();
+                mRenderer.Trajectory.updateTrajectory(translation);
+                mRenderer.ModelMatCalculator.updateModelMatrix(translation, pose.GetRotationAsFloats());
+                mRenderer.updateViewMatrix();
+                mGLView.RequestRender();
+            }
+        }
 
-			private class RunnableAnonymousInnerClassHelper 
-			{
-				private readonly OnTangoUpdateListenerAnonymousInnerClassHelper outerInstance;
-
-				private TangoEvent args;
-
-				public RunnableAnonymousInnerClassHelper(OnTangoUpdateListenerAnonymousInnerClassHelper outerInstance, TangoEvent args)
-				{
-					this.outerInstance = outerInstance;
-					this.args = args;
-				}
-
-				public  void run()
-				{
-					outerInstance.outerInstance.mTangoEventTextView.Text = args.EventKey + ": " + args.EventValue;
-				}
-			}
-
-			public void OnPoseAvailable(TangoPoseData pose)
-			{
-
-				// Update the text views with Pose info.
-				outerInstance.updateTextViewWith(pose);
-				bool updateRenderer = false;
-				if (outerInstance.mIsRelocalized)
-				{
-					if (pose.BaseFrame == TangoPoseData.CoordinateFrameAreaDescription && pose.TargetFrame == TangoPoseData.CoordinateFrameDevice)
-					{
-						updateRenderer = true;
-					}
-				}
-				else
-				{
-					if (pose.BaseFrame == TangoPoseData.CoordinateFrameStartOfService && pose.TargetFrame == TangoPoseData.CoordinateFrameDevice)
-					{
-						updateRenderer = true;
-					}
-				}
-
-				// Update the trajectory, model matrix, and view matrix, then
-				// render the scene again
-				if (updateRenderer)
-				{
-                    float[] translation = pose.GetTranslationAsFloats();
-					outerInstance.mRenderer.Trajectory.updateTrajectory(translation);
-					outerInstance.mRenderer.ModelMatCalculator.updateModelMatrix(translation, pose.GetTranslationAsFloats());
-					outerInstance.mRenderer.updateViewMatrix();
-					outerInstance.mGLView.RequestRender();
-				}
-			}
-		}
-
+        public void OnTangoEvent(TangoEvent args)
+        {
+            RunOnUiThread(() =>
+            {
+                mTangoEventTextView.Text = args.EventKey + ": " + args.EventValue;
+            });
+        }
 		private void saveAdf()
 		{
 			showSetNameDialog();
@@ -305,7 +283,7 @@ namespace com.projecttango.areadescriptionjava
 			byte[] adfNameBytes = metaData.Get("name");
 			if (adfNameBytes != null)
 			{
-				string fillDialogName = StringHelperClass.NewString(adfNameBytes);
+				string fillDialogName = StringHelper.NewString(adfNameBytes);
 				bundle.PutString("name", fillDialogName);
 			}
 			bundle.PutString("id", mCurrentUUID);
@@ -333,83 +311,65 @@ namespace com.projecttango.areadescriptionjava
 		/// <param name="pose"> </param>
 //JAVA TO C# CONVERTER WARNING: 'final' parameters are not available in .NET:
            // Original line in class:  private void updateTextViewWith(final com.google.atap.tangoservice.TangoPoseData pose)
-		private void updateTextViewWith(TangoPoseData pose)
-		{
+        private void updateTextViewWith(TangoPoseData pose)
+        {
 
-           // Original line in class:  final java.text.DecimalFormat threeDec = new java.text.DecimalFormat("0.000");
-			DecimalFormat threeDec = new DecimalFormat("0.000");
-		    System.Threading.Thread.CurrentThread.Start( new RunnableAnonymousInnerClassHelper2(this, pose, threeDec));  // TODO: Does thread start?
-		}
+          
+            this.RunOnUiThread(() =>
+                {
+                    string translationString = "[" + threeDec.format(pose.Translation[0]) + "," + threeDec.format(pose.Translation[1]) + "," + threeDec.format(pose.Translation[2]) + "] ";
 
-		private class RunnableAnonymousInnerClassHelper2 
-		{
-			private readonly AreaDescription outerInstance;
+                    string quaternionString = "[" + threeDec.format(pose.Rotation[0]) + "," + threeDec.format(pose.Rotation[1]) + "," + threeDec.format(pose.Rotation[2]) + "," + threeDec.format(pose.Rotation[3]) + "] ";
 
-			private TangoPoseData pose;
-			private DecimalFormat threeDec;
+                    if (pose.BaseFrame == TangoPoseData.CoordinateFrameAreaDescription && pose.TargetFrame == TangoPoseData.CoordinateFrameDevice)
+                    {
+                        mAdf2DevicePoseCount++;
+                        mAdf2DevicePoseDelta = (pose.Timestamp - mAdf2DevicePreviousPoseTimeStamp) * SECONDS_TO_MILLI;
+                        mAdf2DevicePreviousPoseTimeStamp = pose.Timestamp;
+                        mAdf2DeviceTranslationTextView.Text = translationString;
+                        mAdf2DeviceQuatTextView.Text = quaternionString;
+                        mAdf2DevicePoseStatusTextView.Text = getPoseStatus(pose);
+                        mAdf2DevicePoseCountTextView.Text = Convert.ToString(mAdf2DevicePoseCount);
+                        mAdf2DevicePoseDeltaTextView.Text = threeDec.format(mAdf2DevicePoseDelta);
+                    }
 
-			public RunnableAnonymousInnerClassHelper2(AreaDescription outerInstance, TangoPoseData pose, DecimalFormat threeDec)
-			{
-				this.outerInstance = outerInstance;
-				this.pose = pose;
-				this.threeDec = threeDec;
-			}
+                    if (pose.BaseFrame == TangoPoseData.CoordinateFrameStartOfService && pose.TargetFrame == TangoPoseData.CoordinateFrameDevice)
+                    {
+                        mStart2DevicePoseCount++;
+                        mStart2DevicePoseDelta = (pose.Timestamp - mStart2DevicePreviousPoseTimeStamp) * SECONDS_TO_MILLI;
+                        mStart2DevicePreviousPoseTimeStamp = pose.Timestamp;
+                        mStart2DeviceTranslationTextView.Text = translationString;
+                        mStart2DeviceQuatTextView.Text = quaternionString;
+                        mStart2DevicePoseStatusTextView.Text = getPoseStatus(pose);
+                        mStart2DevicePoseCountTextView.Text = Convert.ToString(mStart2DevicePoseCount);
+                        mStart2DevicePoseDeltaTextView.Text = threeDec.format(mStart2DevicePoseDelta);
+                    }
 
-			public void run()
-			{
-				string translationString = "[" + threeDec.format(pose.Translation[0]) + "," + threeDec.format(pose.Translation[1]) + "," + threeDec.format(pose.Translation[2]) + "] ";
-
-				string quaternionString = "[" + threeDec.format(pose.Rotation[0]) + "," + threeDec.format(pose.Rotation[1]) + "," + threeDec.format(pose.Rotation[2]) + "," + threeDec.format(pose.Rotation[3]) + "] ";
-
-				if (pose.BaseFrame == TangoPoseData.CoordinateFrameAreaDescription && pose.TargetFrame == TangoPoseData.CoordinateFrameDevice)
-				{
-					outerInstance.mAdf2DevicePoseCount++;
-					outerInstance.mAdf2DevicePoseDelta = (pose.Timestamp - outerInstance.mAdf2DevicePreviousPoseTimeStamp) * SECONDS_TO_MILLI;
-					outerInstance.mAdf2DevicePreviousPoseTimeStamp = pose.Timestamp;
-					outerInstance.mAdf2DeviceTranslationTextView.Text = translationString;
-					outerInstance.mAdf2DeviceQuatTextView.Text = quaternionString;
-					outerInstance.mAdf2DevicePoseStatusTextView.Text = outerInstance.getPoseStatus(pose);
-					outerInstance.mAdf2DevicePoseCountTextView.Text = Convert.ToString(outerInstance.mAdf2DevicePoseCount);
-					outerInstance.mAdf2DevicePoseDeltaTextView.Text = threeDec.format(outerInstance.mAdf2DevicePoseDelta);
-				}
-
-				if (pose.BaseFrame == TangoPoseData.CoordinateFrameStartOfService && pose.TargetFrame == TangoPoseData.CoordinateFrameDevice)
-				{
-					outerInstance.mStart2DevicePoseCount++;
-					outerInstance.mStart2DevicePoseDelta = (pose.Timestamp - outerInstance.mStart2DevicePreviousPoseTimeStamp) * SECONDS_TO_MILLI;
-					outerInstance.mStart2DevicePreviousPoseTimeStamp = pose.Timestamp;
-					outerInstance.mStart2DeviceTranslationTextView.Text = translationString;
-					outerInstance.mStart2DeviceQuatTextView.Text = quaternionString;
-					outerInstance.mStart2DevicePoseStatusTextView.Text = outerInstance.getPoseStatus(pose);
-					outerInstance.mStart2DevicePoseCountTextView.Text = Convert.ToString(outerInstance.mStart2DevicePoseCount);
-					outerInstance.mStart2DevicePoseDeltaTextView.Text = threeDec.format(outerInstance.mStart2DevicePoseDelta);
-				}
-
-				if (pose.BaseFrame == TangoPoseData.CoordinateFrameAreaDescription && pose.TargetFrame == TangoPoseData.CoordinateFrameStartOfService)
-				{
-					outerInstance.mAdf2StartPoseCount++;
-					outerInstance.mAdf2StartPoseDelta = (pose.Timestamp - outerInstance.mAdf2StartPreviousPoseTimeStamp) * SECONDS_TO_MILLI;
-					outerInstance.mAdf2StartPreviousPoseTimeStamp = pose.Timestamp;
-					outerInstance.mAdf2StartTranslationTextView.Text = translationString;
-					outerInstance.mAdf2StartQuatTextView.Text = quaternionString;
-					outerInstance.mAdf2StartPoseStatusTextView.Text = outerInstance.getPoseStatus(pose);
-					outerInstance.mAdf2StartPoseCountTextView.Text = Convert.ToString(outerInstance.mAdf2StartPoseCount);
-					outerInstance.mAdf2StartPoseDeltaTextView.Text = threeDec.format(outerInstance.mAdf2StartPoseDelta);
-					if (pose.StatusCode == TangoPoseData.PoseValid)
-					{
-						outerInstance.mIsRelocalized = true;
-						// Set the color to green
-						outerInstance.mRenderer.Trajectory.Color = new float[] {0.39f, 0.56f, 0.03f, 1.0f};
-					}
-					else
-					{
-						outerInstance.mIsRelocalized = false;
-						// Set the color blue
-						outerInstance.mRenderer.Trajectory.Color = new float[] {0.22f, 0.28f, 0.67f, 1.0f};
-					}
-				}
-			}
-		}
+                    if (pose.BaseFrame == TangoPoseData.CoordinateFrameAreaDescription && pose.TargetFrame == TangoPoseData.CoordinateFrameStartOfService)
+                    {
+                        mAdf2StartPoseCount++;
+                        mAdf2StartPoseDelta = (pose.Timestamp - mAdf2StartPreviousPoseTimeStamp) * SECONDS_TO_MILLI;
+                        mAdf2StartPreviousPoseTimeStamp = pose.Timestamp;
+                        mAdf2StartTranslationTextView.Text = translationString;
+                        mAdf2StartQuatTextView.Text = quaternionString;
+                        mAdf2StartPoseStatusTextView.Text = getPoseStatus(pose);
+                        mAdf2StartPoseCountTextView.Text = Convert.ToString(mAdf2StartPoseCount);
+                        mAdf2StartPoseDeltaTextView.Text = threeDec.format(mAdf2StartPoseDelta);
+                        if (pose.StatusCode == TangoPoseData.PoseValid)
+                        {
+                            mIsRelocalized = true;
+                            // Set the color to green
+                            mRenderer.Trajectory.Color = new float[] { 0.39f, 0.56f, 0.03f, 1.0f };
+                        }
+                        else
+                        {
+                            mIsRelocalized = false;
+                            // Set the color blue
+                            mRenderer.Trajectory.Color = new float[] { 0.22f, 0.28f, 0.67f, 1.0f };
+                        }
+                    }
+                });
+        }
 
 		private string getPoseStatus(TangoPoseData pose)
 		{
@@ -422,21 +382,21 @@ namespace com.projecttango.areadescriptionjava
 			case TangoPoseData.PoseValid:
 				return GetString(Resource.String.pose_valid);
 			default:
-				return GetString(Resource.String.PoseUnknownN);
+				return GetString(Resource.String.pose_unknown);
 			}
 		}
 
 		protected override void OnPause()
 		{
-			base.OnPause();
-			try
-			{
-				mTango.Disconnect();
-			}
-			catch (TangoErrorException)
-			{
-				Toast.MakeText(ApplicationContext, Resource.String.tango_error, Android.Widget.ToastLength.Short).Show();
-			}
+            base.OnPause();
+            try
+            {
+                mTango.Disconnect();
+            }
+            catch (TangoErrorException)
+            {
+                Toast.MakeText(ApplicationContext, Resource.String.tango_error, Android.Widget.ToastLength.Short).Show();
+            }
 		}
 
 		protected override void OnResume()
@@ -474,16 +434,16 @@ namespace com.projecttango.areadescriptionjava
 		{
 			switch (v.Id)
 			{
-			case R.id.first_person_button:
+			case Resource.Id.first_person_button:
 				mRenderer.SetFirstPersonView();
 				break;
-			case R.id.top_down_button:
+			case Resource.Id.top_down_button:
 				mRenderer.SetTopDownView();
 				break;
-			case R.id.third_person_button:
+			case Resource.Id.third_person_button:
 				mRenderer.SetThirdPersonView();
 				break;
-			case R.id.saveAdf:
+			case Resource.Id.saveAdf:
 				saveAdf();
 				break;
 			default:

@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 
 /*
  * Copyright 2014 HobbiSoft. All Rights Reserved.
@@ -18,6 +18,7 @@
 
 namespace com.projecttango.tangoutils
 {
+    using System;
     using Com.Google.Atap.Tangoservice;
     using GLES20 = Android.Opengl.GLES20;
     using Matrix = Android.Opengl.Matrix;

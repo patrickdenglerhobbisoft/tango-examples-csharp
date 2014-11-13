@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("com.projecttango.areadescriptionjava.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("com.projecttango.areadescriptioncsharp.Resource", IsApplication=true)]
 
-namespace com.projecttango.areadescriptionjava
+namespace com.projecttango.areadescriptioncsharp
 {
 	
 	
@@ -26,8 +26,8 @@ namespace com.projecttango.areadescriptionjava
 		
 		public static void UpdateIdValues()
 		{
-			global::TangoUtils.Resource.String.ApplicationName = global::com.projecttango.areadescriptionjava.Resource.String.ApplicationName;
-			global::TangoUtils.Resource.String.Hello = global::com.projecttango.areadescriptionjava.Resource.String.Hello;
+			global::TangoUtils.Resource.String.ApplicationName = global::com.projecttango.areadescriptioncsharp.Resource.String.ApplicationName;
+			global::TangoUtils.Resource.String.Hello = global::com.projecttango.areadescriptioncsharp.Resource.String.Hello;
 		}
 		
 		public partial class Array
@@ -103,59 +103,131 @@ namespace com.projecttango.areadescriptionjava
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f080025
+			public const int ADFListView = 2131230757;
+			
+			// aapt resource value: 0x7f08001a
+			public const int AbsoluteLayout1 = 2131230746;
+			
+			// aapt resource value: 0x7f08001f
+			public const int Ok = 2131230751;
+			
+			// aapt resource value: 0x7f08001c
+			public const int RelativeLayout = 2131230748;
+			
+			// aapt resource value: 0x7f08001d
+			public const int RelativeLayout1 = 2131230749;
+			
 			// aapt resource value: 0x7f08000c
-			public const int ADFListView = 2131230732;
-			
-			// aapt resource value: 0x7f080000
-			public const int AbsoluteLayout1 = 2131230720;
-			
-			// aapt resource value: 0x7f080006
-			public const int Ok = 2131230726;
-			
-			// aapt resource value: 0x7f080002
-			public const int RelativeLayout = 2131230722;
-			
-			// aapt resource value: 0x7f080004
-			public const int RelativeLayout1 = 2131230724;
-			
-			// aapt resource value: 0x7f080010
-			public const int adfName = 2131230736;
-			
-			// aapt resource value: 0x7f080005
-			public const int cancel = 2131230725;
-			
-			// aapt resource value: 0x7f080003
-			public const int gl_surface_view = 2131230723;
-			
-			// aapt resource value: 0x7f08000a
-			public const int learningmode = 2131230730;
-			
-			// aapt resource value: 0x7f080009
-			public const int loadadf = 2131230729;
-			
-			// aapt resource value: 0x7f080007
-			public const int name = 2131230727;
-			
-			// aapt resource value: 0x7f080001
-			public const int pathView1 = 2131230721;
-			
-			// aapt resource value: 0x7f08000b
-			public const int start = 2131230731;
-			
-			// aapt resource value: 0x7f080011
-			public const int uuid = 2131230737;
-			
-			// aapt resource value: 0x7f080008
-			public const int uuidDisplay = 2131230728;
+			public const int adf2deviceDeltatime = 2131230732;
 			
 			// aapt resource value: 0x7f08000d
-			public const int uuidListViewLinearLayout = 2131230733;
+			public const int adf2devicePose = 2131230733;
+			
+			// aapt resource value: 0x7f08000b
+			public const int adf2devicePosecount = 2131230731;
 			
 			// aapt resource value: 0x7f08000e
-			public const int uuidlistviewAPI = 2131230734;
+			public const int adf2deviceQuat = 2131230734;
+			
+			// aapt resource value: 0x7f08000a
+			public const int adf2deviceStatus = 2131230730;
+			
+			// aapt resource value: 0x7f080011
+			public const int adf2startDeltatime = 2131230737;
+			
+			// aapt resource value: 0x7f080012
+			public const int adf2startPose = 2131230738;
+			
+			// aapt resource value: 0x7f080010
+			public const int adf2startPosecount = 2131230736;
+			
+			// aapt resource value: 0x7f080013
+			public const int adf2startQuat = 2131230739;
 			
 			// aapt resource value: 0x7f08000f
-			public const int uuidlistviewApplicationSpace = 2131230735;
+			public const int adf2startStatus = 2131230735;
+			
+			// aapt resource value: 0x7f080029
+			public const int adfName = 2131230761;
+			
+			// aapt resource value: 0x7f080003
+			public const int appversion = 2131230723;
+			
+			// aapt resource value: 0x7f08001e
+			public const int cancel = 2131230750;
+			
+			// aapt resource value: 0x7f080018
+			public const int first_person_button = 2131230744;
+			
+			// aapt resource value: 0x7f080000
+			public const int gl_surface_view = 2131230720;
+			
+			// aapt resource value: 0x7f080023
+			public const int learningmode = 2131230755;
+			
+			// aapt resource value: 0x7f080001
+			public const int linearLayout1 = 2131230721;
+			
+			// aapt resource value: 0x7f080022
+			public const int loadadf = 2131230754;
+			
+			// aapt resource value: 0x7f080020
+			public const int name = 2131230752;
+			
+			// aapt resource value: 0x7f08001b
+			public const int pathView1 = 2131230747;
+			
+			// aapt resource value: 0x7f080019
+			public const int saveAdf = 2131230745;
+			
+			// aapt resource value: 0x7f080024
+			public const int start = 2131230756;
+			
+			// aapt resource value: 0x7f080007
+			public const int start2deviceDeltatime = 2131230727;
+			
+			// aapt resource value: 0x7f080008
+			public const int start2devicePose = 2131230728;
+			
+			// aapt resource value: 0x7f080006
+			public const int start2devicePosecount = 2131230726;
+			
+			// aapt resource value: 0x7f080009
+			public const int start2deviceQuat = 2131230729;
+			
+			// aapt resource value: 0x7f080005
+			public const int start2deviceStatus = 2131230725;
+			
+			// aapt resource value: 0x7f080004
+			public const int tangoevent = 2131230724;
+			
+			// aapt resource value: 0x7f080017
+			public const int third_person_button = 2131230743;
+			
+			// aapt resource value: 0x7f080016
+			public const int top_down_button = 2131230742;
+			
+			// aapt resource value: 0x7f080014
+			public const int uuid = 2131230740;
+			
+			// aapt resource value: 0x7f080015
+			public const int uuidCount = 2131230741;
+			
+			// aapt resource value: 0x7f080021
+			public const int uuidDisplay = 2131230753;
+			
+			// aapt resource value: 0x7f080026
+			public const int uuidListViewLinearLayout = 2131230758;
+			
+			// aapt resource value: 0x7f080027
+			public const int uuidlistviewAPI = 2131230759;
+			
+			// aapt resource value: 0x7f080028
+			public const int uuidlistviewApplicationSpace = 2131230760;
+			
+			// aapt resource value: 0x7f080002
+			public const int version = 2131230722;
 			
 			static Id()
 			{
@@ -204,17 +276,11 @@ namespace com.projecttango.areadescriptionjava
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f040013
-			public const int _Set_name_dialogTitle = 2130968595;
-			
 			// aapt resource value: 0x7f040001
 			public const int ApplicationName = 2130968577;
 			
 			// aapt resource value: 0x7f040000
 			public const int Hello = 2130968576;
-			
-			// aapt resource value: 0x7f040032
-			public const int PoseUnknownN = 2130968626;
 			
 			// aapt resource value: 0x7f040009
 			public const int adf2device = 2130968585;
@@ -318,6 +384,9 @@ namespace com.projecttango.areadescriptionjava
 			// aapt resource value: 0x7f040031
 			public const int pose_invalid = 2130968625;
 			
+			// aapt resource value: 0x7f040032
+			public const int pose_unknown = 2130968626;
+			
 			// aapt resource value: 0x7f040030
 			public const int pose_valid = 2130968624;
 			
@@ -329,6 +398,9 @@ namespace com.projecttango.areadescriptionjava
 			
 			// aapt resource value: 0x7f040004
 			public const int service_version = 2130968580;
+			
+			// aapt resource value: 0x7f040013
+			public const int set_name_dialogTitle = 2130968595;
 			
 			// aapt resource value: 0x7f040012
 			public const int start = 2130968594;

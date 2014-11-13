@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("PointCloud.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("com.projecttango.pointcloudcsharp.Resource", IsApplication=true)]
 
-namespace PointCloud
+namespace com.projecttango.pointcloudcsharp
 {
 	
 	
@@ -26,8 +26,8 @@ namespace PointCloud
 		
 		public static void UpdateIdValues()
 		{
-			global::TangoUtils.Resource.String.ApplicationName = global::PointCloud.Resource.String.ApplicationName;
-			global::TangoUtils.Resource.String.Hello = global::PointCloud.Resource.String.Hello;
+			global::TangoUtils.Resource.String.ApplicationName = global::com.projecttango.pointcloudcsharp.Resource.String.ApplicationName;
+			global::TangoUtils.Resource.String.Hello = global::com.projecttango.pointcloudcsharp.Resource.String.Hello;
 		}
 		
 		public partial class Attribute

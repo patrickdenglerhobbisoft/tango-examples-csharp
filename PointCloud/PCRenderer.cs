@@ -13,29 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using Com.Google.Atap.Tangoservice;
-namespace com.projecttango.Pointcloudjava
+
+namespace com.projecttango.pointcloudcsharp
 {
-    using Com.Google.Atap.Tangoservice;
+   
     using Android.Content;
-    using Button = Android.Widget.Button;
-    using Toast = Android.Widget.Toast;
-    using ToggleButton = Android.Widget.ToggleButton;
-    using View = Android.Views.View;
+    using Android.Widget;
+    using Android.Views;
     using Android.App;
     using Android.OS;
-
-
-	using Renderer = com.projecttango.tangoutils.Renderer;
-	using CameraFrustum = com.projecttango.tangoutils.renderables.CameraFrustum;
-	using CameraFrustumAndAxis = com.projecttango.tangoutils.renderables.CameraFrustumAndAxis;
-	using Grid = com.projecttango.tangoutils.renderables.Grid;
-	using PointCloud = com.projecttango.tangoutils.renderables.PointCloud;
-
-	using GLES20 = Android.Opengl.GLES20;
-	using GLSurfaceView = Android.Opengl.GLSurfaceView;
-    using Matrix = Android.Opengl.Matrix;
-
+    using Com.Google.Atap.Tangoservice;
+    using com.projecttango.tangoutils;
+	using com.projecttango.tangoutils.renderables;
+	using Android.Opengl;
+	
 	/// <summary>
 	/// OpenGL rendering class for the Motion Tracking API sample. This class
 	/// managers the objects visible in the OpenGL view which are the
@@ -105,10 +96,7 @@ namespace com.projecttango.Pointcloudjava
            
         }
 
-        public System.IntPtr Handle
-        {
-            get { return System.IntPtr.Zero; }
-        }
+        
     }
 
 }

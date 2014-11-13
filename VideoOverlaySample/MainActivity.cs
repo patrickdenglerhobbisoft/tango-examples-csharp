@@ -1,4 +1,4 @@
-﻿using Com.Google.Atap.Tangoservice;
+﻿
 /*
  * Copyright 2014 HobbiSoft. All Rights Reserved.
  *
@@ -17,119 +17,49 @@
 namespace com.projecttango.videooverlaysample
 {
 
-	using Activity = Android.App.Activity;
-	using Bundle = Android.OS.Bundle;
-	using Surface = Android.Views.Surface;
+    using Com.Google.Atap.Tangoservice;
+    using Android.Graphics;
+	using Android.OS;
+	using Android.Views;
     using SurfaceHolder = Android.Views.ISurfaceHolder;
-	using SurfaceView = Android.Views.SurfaceView;
+    using Android.App;
 
-
-
-    public class MainActivity : Activity, Android.Views.ISurfaceHolder, Android.Views.ISurfaceHolderCallback
+    [Activity(Label = "VideoOverlay",
+       MainLauncher = true,
+       Icon = "@drawable/icon")]
+    public class MainActivity : Activity,  Android.Views.ISurfaceHolderCallback
 	{
 
 		private SurfaceView surfaceView;
 		private SurfaceHolder surfaceHolder;
 		private Tango mTango;
+   
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
-			//ContentView = Resource.Layout.activity_main; TODO: Content View
+			SetContentView(Resource.Layout.activity_main);
 			surfaceView = (SurfaceView) FindViewById(Resource.Id.cameraView);
 			surfaceHolder = surfaceView.Holder;
             surfaceHolder.AddCallback(this);
 			mTango = new Tango(this);
 		}
 
-		public  void SurfaceCreated(SurfaceHolder holder)
-		{
-		    Surface surface = holder.Surface;
-			 if (surface.IsValid)
-			 {
-				 TangoConfig config = new TangoConfig();
-				 config = mTango.GetConfig(TangoConfig.ConfigTypeCurrent);
-				 mTango.ConnectSurface(0, surface);
-				 mTango.Connect(config);
-			 }
-		}
+        public void SurfaceChanged(ISurfaceHolder holder, Format format, int width, int height) { }
 
-		
-
-        public void SurfaceChanged(SurfaceHolder holder, Android.Graphics.Format format, int width, int height)
+        public void SurfaceCreated(ISurfaceHolder holder)
         {
-            throw new System.NotImplementedException();
+            Surface surface = holder.Surface;
+            if (surface.IsValid)
+            {
+                TangoConfig config = new TangoConfig();
+                config = mTango.GetConfig(TangoConfig.ConfigTypeCurrent);
+                mTango.ConnectSurface(0, surface);
+                mTango.Connect(config);
+            }
         }
 
-        public void SurfaceDestroyed(SurfaceHolder holder)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void AddCallback(Android.Views.ISurfaceHolderCallback callback)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool IsCreating
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public Android.Graphics.Canvas LockCanvas(Android.Graphics.Rect dirty)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Android.Graphics.Canvas LockCanvas()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void RemoveCallback(Android.Views.ISurfaceHolderCallback callback)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void SetFixedSize(int width, int height)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void SetFormat(Android.Graphics.Format format)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void SetKeepScreenOn(bool screenOn)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void SetSizeFromLayout()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void SetType(Android.Views.SurfaceType type)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Surface Surface
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public Android.Graphics.Rect SurfaceFrame
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public void UnlockCanvasAndPost(Android.Graphics.Canvas canvas)
-        {
-            throw new System.NotImplementedException();
-        }
+        public void SurfaceDestroyed(ISurfaceHolder holder){}
     }
 
 }

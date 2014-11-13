@@ -46,6 +46,7 @@
     <Compile Include="Alias.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs.cs" />
+    <Compile Include="TangoListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Jars\AboutJars.txt" />

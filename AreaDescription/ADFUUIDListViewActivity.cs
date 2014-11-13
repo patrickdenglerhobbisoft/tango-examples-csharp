@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace com.projecttango.areadescriptionjava
+namespace com.projecttango.areadescriptioncsharp
 {
     
     using Com.Google.Atap.Tangoservice;
@@ -30,17 +30,11 @@ namespace com.projecttango.areadescriptionjava
 	using  Android.OS;
     using Android.Views;
 
-	//using ContextMenuInfo = Android.Views.ContextMenu.ContextMenuInfo;
-	using LayoutInflater = Android.Views.LayoutInflater;
-//	using MenuItem = Android.Views.WindowFeatures.MenuItem;
-	using Android.Views;
+
     using Java.IO;
 	using Android.Widget;
 
-    using R = Resource;
-    using id = Resource.Id;
-    using Layout = Resource.Layout;
-    using _string = Resource.String;
+
 	/// <summary>
 	/// This class lets you manage ADFs between this class's Application Package
 	/// folder and API private space. This show cases mainly three things: Import,
@@ -60,7 +54,7 @@ namespace com.projecttango.areadescriptionjava
         protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
-		//	ContentView = Resource.Layout.uuid_listview;  // TODO: 
+		    SetContentView(Resource.Layout.uuid_listview); 
 			mAPISpaceMenuStrings = Resources.GetStringArray(Resource.Array.SetDialogMenuItemsAPISpace);
 			mAppSpaceMenuStrings = Resources.GetStringArray(Resource.Array.SetDialogMenuItemsAppSpace);
 
@@ -229,7 +223,7 @@ namespace com.projecttango.areadescriptionjava
 		    byte[] adfNameBytes = metaData.Get("name");
 			if (adfNameBytes != null)
 			{
-				string fillDialogName = StringHelperClass.NewString(adfNameBytes);
+				string fillDialogName = StringHelper.NewString(adfNameBytes);
 				bundle.PutString("name", fillDialogName);
 			}
 			bundle.PutString("id", mCurrentUUID);
@@ -244,7 +238,7 @@ namespace com.projecttango.areadescriptionjava
 			TangoAreaDescriptionMetaData metadata = new TangoAreaDescriptionMetaData();
 			metadata = mADFDataSource.Tango.LoadAreaDescriptionMetaData(uuid);
 			var adfNameBytes = metadata.Get("name");
-            string comparer = StringHelperClass.NewString(adfNameBytes);
+            string comparer = StringHelper.NewString(adfNameBytes);
             if (comparer != name)
 			{
 				adfNameBytes = (byte[])(System.Array) name.GetBytes();
