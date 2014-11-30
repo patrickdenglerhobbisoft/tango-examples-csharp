@@ -297,8 +297,10 @@ namespace com.projecttango.areadescriptioncsharp
 		{
 
 			TangoAreaDescriptionMetaData metadata = new TangoAreaDescriptionMetaData();
+
 			metadata = mTango.LoadAreaDescriptionMetaData(uuids);
 			metadata.Set("name", (byte[])(System.Array)name.GetBytes());
+            var l = metadata.Data.GetStringArrayList(null);
 			mTango.SaveAreaDescriptionMetadata(uuids, metadata);
 			Toast.MakeText(ApplicationContext, GetString(Resource.String.adf_save) + uuids, Android.Widget.ToastLength.Short).Show();
 		}
@@ -317,58 +319,71 @@ namespace com.projecttango.areadescriptioncsharp
           
             this.RunOnUiThread(() =>
                 {
-                    string translationString = "[" + threeDec.format(pose.Translation[0]) + "," + threeDec.format(pose.Translation[1]) + "," + threeDec.format(pose.Translation[2]) + "] ";
-
-                    string quaternionString = "[" + threeDec.format(pose.Rotation[0]) + "," + threeDec.format(pose.Rotation[1]) + "," + threeDec.format(pose.Rotation[2]) + "," + threeDec.format(pose.Rotation[3]) + "] ";
-
-                    if (pose.BaseFrame == TangoPoseData.CoordinateFrameAreaDescription && pose.TargetFrame == TangoPoseData.CoordinateFrameDevice)
+                    try
                     {
-                        mAdf2DevicePoseCount++;
-                        mAdf2DevicePoseDelta = (pose.Timestamp - mAdf2DevicePreviousPoseTimeStamp) * SECONDS_TO_MILLI;
-                        mAdf2DevicePreviousPoseTimeStamp = pose.Timestamp;
-                        mAdf2DeviceTranslationTextView.Text = translationString;
-                        mAdf2DeviceQuatTextView.Text = quaternionString;
-                        mAdf2DevicePoseStatusTextView.Text = getPoseStatus(pose);
-                        mAdf2DevicePoseCountTextView.Text = Convert.ToString(mAdf2DevicePoseCount);
-                        mAdf2DevicePoseDeltaTextView.Text = threeDec.format(mAdf2DevicePoseDelta);
-                    }
+                        string translationString = "[" + threeDec.format(pose.Translation[0]) + "," + threeDec.format(pose.Translation[1]) + "," + threeDec.format(pose.Translation[2]) + "] ";
 
-                    if (pose.BaseFrame == TangoPoseData.CoordinateFrameStartOfService && pose.TargetFrame == TangoPoseData.CoordinateFrameDevice)
-                    {
-                        mStart2DevicePoseCount++;
-                        mStart2DevicePoseDelta = (pose.Timestamp - mStart2DevicePreviousPoseTimeStamp) * SECONDS_TO_MILLI;
-                        mStart2DevicePreviousPoseTimeStamp = pose.Timestamp;
-                        mStart2DeviceTranslationTextView.Text = translationString;
-                        mStart2DeviceQuatTextView.Text = quaternionString;
-                        mStart2DevicePoseStatusTextView.Text = getPoseStatus(pose);
-                        mStart2DevicePoseCountTextView.Text = Convert.ToString(mStart2DevicePoseCount);
-                        mStart2DevicePoseDeltaTextView.Text = threeDec.format(mStart2DevicePoseDelta);
-                    }
+                        string quaternionString = "[" + threeDec.format(pose.Rotation[0]) + "," + threeDec.format(pose.Rotation[1]) + "," + threeDec.format(pose.Rotation[2]) + "," + threeDec.format(pose.Rotation[3]) + "] ";
 
-                    if (pose.BaseFrame == TangoPoseData.CoordinateFrameAreaDescription && pose.TargetFrame == TangoPoseData.CoordinateFrameStartOfService)
-                    {
-                        mAdf2StartPoseCount++;
-                        mAdf2StartPoseDelta = (pose.Timestamp - mAdf2StartPreviousPoseTimeStamp) * SECONDS_TO_MILLI;
-                        mAdf2StartPreviousPoseTimeStamp = pose.Timestamp;
-                        mAdf2StartTranslationTextView.Text = translationString;
-                        mAdf2StartQuatTextView.Text = quaternionString;
-                        mAdf2StartPoseStatusTextView.Text = getPoseStatus(pose);
-                        mAdf2StartPoseCountTextView.Text = Convert.ToString(mAdf2StartPoseCount);
-                        mAdf2StartPoseDeltaTextView.Text = threeDec.format(mAdf2StartPoseDelta);
-                        if (pose.StatusCode == TangoPoseData.PoseValid)
+                        if ((pose.BaseFrame == TangoPoseData.CoordinateFrameAreaDescription) && (pose.TargetFrame == TangoPoseData.CoordinateFrameDevice))
                         {
-                            mIsRelocalized = true;
-                            // Set the color to green
-                            mRenderer.Trajectory.Color = new float[] { 0.39f, 0.56f, 0.03f, 1.0f };
+                            mAdf2DevicePoseCount++;
+                            mAdf2DevicePoseDelta = (pose.Timestamp - mAdf2DevicePreviousPoseTimeStamp) * SECONDS_TO_MILLI;
+                            mAdf2DevicePreviousPoseTimeStamp = pose.Timestamp;
+                            mAdf2DeviceTranslationTextView.Text = translationString;
+                            mAdf2DeviceQuatTextView.Text = quaternionString;
+                            mAdf2DevicePoseStatusTextView.Text = getPoseStatus(pose);
+                            mAdf2DevicePoseCountTextView.Text = Convert.ToString(mAdf2DevicePoseCount);
+                            mAdf2DevicePoseDeltaTextView.Text = threeDec.format(mAdf2DevicePoseDelta);
                         }
-                        else
+
+                        if ((pose.BaseFrame == TangoPoseData.CoordinateFrameStartOfService) && (pose.TargetFrame == TangoPoseData.CoordinateFrameDevice))
                         {
-                            mIsRelocalized = false;
-                            // Set the color blue
-                            mRenderer.Trajectory.Color = new float[] { 0.22f, 0.28f, 0.67f, 1.0f };
+                            mStart2DevicePoseCount++;
+                            mStart2DevicePoseDelta = (pose.Timestamp - mStart2DevicePreviousPoseTimeStamp) * SECONDS_TO_MILLI;
+                            mStart2DevicePreviousPoseTimeStamp = pose.Timestamp;
+                            mStart2DeviceTranslationTextView.Text = translationString;
+                            mStart2DeviceQuatTextView.Text = quaternionString;
+                            mStart2DevicePoseStatusTextView.Text = getPoseStatus(pose);
+                            mStart2DevicePoseCountTextView.Text = Convert.ToString(mStart2DevicePoseCount);
+                            mStart2DevicePoseDeltaTextView.Text = threeDec.format(mStart2DevicePoseDelta);
                         }
+
+                        if ((pose.BaseFrame == TangoPoseData.CoordinateFrameAreaDescription) && (pose.TargetFrame == TangoPoseData.CoordinateFrameStartOfService))
+                        {
+                            mAdf2StartPoseCount++;
+                            mAdf2StartPoseDelta = (pose.Timestamp - mAdf2StartPreviousPoseTimeStamp) * SECONDS_TO_MILLI;
+                            mAdf2StartPreviousPoseTimeStamp = pose.Timestamp;
+                            mAdf2StartTranslationTextView.Text = translationString;
+                            mAdf2StartQuatTextView.Text = quaternionString;
+                            mAdf2StartPoseStatusTextView.Text = getPoseStatus(pose);
+                            mAdf2StartPoseCountTextView.Text = Convert.ToString(mAdf2StartPoseCount);
+                            mAdf2StartPoseDeltaTextView.Text = threeDec.format(mAdf2StartPoseDelta);
+
+
+                            if (pose.StatusCode == TangoPoseData.PoseValid)
+                            {
+                                mIsRelocalized = true;
+                                // Set the color to green
+                                if (mRenderer.Trajectory != null)
+                                    mRenderer.Trajectory.Color = new float[] { 0.39f, 0.56f, 0.03f, 1.0f };
+                            }
+                            else
+                            {
+                                mIsRelocalized = false;
+                                // Set the color blue
+                                if (mRenderer.Trajectory != null)
+                                    mRenderer.Trajectory.Color = new float[] { 0.22f, 0.28f, 0.67f, 1.0f };
+                            }
+
+                        }
+                    }
+                    catch (System.Exception e)
+                    {
+                        Toast.MakeText(ApplicationContext, e.Message, Android.Widget.ToastLength.Short).Show();
                     }
                 });
+                         
         }
 
 		private string getPoseStatus(TangoPoseData pose)

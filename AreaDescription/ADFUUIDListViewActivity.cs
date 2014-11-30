@@ -18,10 +18,11 @@ namespace com.projecttango.areadescriptioncsharp
 {
     
     using Com.Google.Atap.Tangoservice;
-    using Tango = Com.Google.Atap.Tangoservice.Tango;
-    using TangoAreaDescriptionMetaData = Com.Google.Atap.Tangoservice.TangoAreaDescriptionMetaData;
+
+   
+    
     using TangoErrorException = Com.Google.Atap.Tangoservice.TangoErrorException;
-    using SetNameCommunicator = SetADFNameDialog.SetNameCommunicator;
+
 
 
 	using Android.App;
@@ -42,7 +43,7 @@ namespace com.projecttango.areadescriptioncsharp
 	/// file path.
 	/// 
 	/// </summary>
-	public class ADFUUIDListViewActivity : Activity, SetNameCommunicator
+    public class ADFUUIDListViewActivity : Activity, SetADFNameDialog.SetNameCommunicator
 	{
 		private ADFDataSource mADFDataSource;
 		private ListView mUUIDListView, mAppSpaceUUIDListView;
@@ -76,9 +77,9 @@ namespace com.projecttango.areadescriptioncsharp
 			RegisterForContextMenu(mAppSpaceUUIDListView);
 		}
 
-        public override void OnCreateContextMenu(IContextMenu menu, View v,IContextMenuContextMenuInfo menuInfo)
+        public override void OnCreateContextMenu(IContextMenu menu, View v, IContextMenuContextMenuInfo menuInfo)
         {
-            //base.OnCreateContextMenu(menu, v, menuInfo);   TODO: Is this required??
+            base.OnCreateContextMenu(menu, v, menuInfo);  // TODO: Is this required??
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
             if (v.Id == Resource.Id.uuidlistviewAPI)
             {
@@ -233,7 +234,7 @@ namespace com.projecttango.areadescriptioncsharp
 			SetADFNameDialog.Show(manager, "ADFNameDialog");
 		}
 
-		public virtual void SetName(string name, string uuid)
+        void SetADFNameDialog.SetNameCommunicator.SetName(string name, string uuid)
 		{
 			TangoAreaDescriptionMetaData metadata = new TangoAreaDescriptionMetaData();
 			metadata = mADFDataSource.Tango.LoadAreaDescriptionMetaData(uuid);
@@ -250,7 +251,9 @@ namespace com.projecttango.areadescriptioncsharp
 			mADFAdapter = new ADFUUIDArrayAdapter(this, mUUIDList, mUUIDNames);
 			mUUIDListView.Adapter = mADFAdapter;
 		}
-	}
+
+   
+    }
 
 	/// <summary>
 	/// This is an adapter class which maps the ListView with a Data Source(Array of
