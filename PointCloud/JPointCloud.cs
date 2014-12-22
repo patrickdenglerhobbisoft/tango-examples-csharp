@@ -19,7 +19,7 @@ namespace com.projecttango.pointcloudcsharp
 {
     using System;
     using System.Collections.Generic;
-    using Com.Google.Atap.Tangoservice;
+  
     using Android.Opengl;
     using Android.Util;
     using Android.App;
@@ -29,7 +29,7 @@ namespace com.projecttango.pointcloudcsharp
     using Android.OS;
     using Android.Widget;
     using Java.IO;
-	using OnTangoUpdateListener = Tango.IOnTangoUpdateListener;
+	
     using IOnClickListener = Android.Views.View.IOnClickListener;
     using Com.Google.Atap.Tangoservice;
 

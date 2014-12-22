@@ -487,8 +487,7 @@ namespace Com.Google.Atap.Tangoservice
     public partial class Tango
     {
 
-        public const string EXTRA_KEY_PERMISSIONTYPE = "PERMISSIONTYPE";
-        public const string EXTRA_VALUE_MOTION_TRACKING = "MOTION_TRACKING_PERMISSION";
+  
         private const string sTranslationFormat = "Translation: %f, %f, %f";
         private const string sRotationFormat = "Rotation: %f, %f, %f, %f";
     }
