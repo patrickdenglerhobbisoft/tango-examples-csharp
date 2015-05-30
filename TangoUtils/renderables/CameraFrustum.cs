@@ -5,10 +5,10 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.Apache.Org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed On an "AS IS" BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -16,13 +16,13 @@
 
 namespace com.projecttango.tangoutils.renderables
 {
-    using Com.Google.Atap.Tangoservice;
-    using Java.Nio;
 
+    using Java.Nio;
     using GLES20 = Android.Opengl.GLES20;
-    using Matrix = Android.Opengl.Matrix;
+	using Matrix = Android.Opengl.Matrix;
+
 	/// <summary>
-	/// <seealso cref="Renderable"/> openGl object showing the Camera Frustum in 3D. This shows
+	/// <seealso cref="Renderable"/> OpenGL object showing the Camera Frustum in 3D. This shows
 	/// the view of the Tango camera at the current translation and rotation.
 	/// </summary>
 	public class CameraFrustum : Renderable

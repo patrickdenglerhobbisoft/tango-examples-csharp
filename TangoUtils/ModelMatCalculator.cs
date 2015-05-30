@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 
 /*
  * Copyright 2014 HobbiSoft. All Rights Reserved.
@@ -7,10 +7,10 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.Apache.Org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed On an "AS IS" BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -18,10 +18,9 @@
 
 namespace com.projecttango.tangoutils
 {
-    using System;
-    using Com.Google.Atap.Tangoservice;
-    using GLES20 = Android.Opengl.GLES20;
-    using Matrix = Android.Opengl.Matrix;
+
+	using Matrix = Android.Opengl.Matrix;
+
 	/// <summary>
 	/// Utility class to manage the calculation of a Model Matrix from the
 	/// translation and quaternion arrays obtained from an <seealso cref="TangoPose"/> object.
@@ -36,7 +35,7 @@ namespace com.projecttango.tangoutils
 		private float[] mPointCloudModelMatrix = new float[16];
 		private float[] mDevice2IMUMatrix = new float[] {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 		private float[] mColorCamera2IMUMatrix = new float[] {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-		private float[] mopenGl2ColorCameraMatrix = new float[] {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+		private float[] mOpengl2ColorCameraMatrix = new float[] {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 
 		public ModelMatCalculator()
 		{
@@ -56,7 +55,7 @@ namespace com.projecttango.tangoutils
 
 			float[] tempMultMatrix = new float[16];
 			Matrix.SetIdentityM(tempMultMatrix, 0);
-			Matrix.MultiplyMM(tempMultMatrix, 0, mColorCamera2IMUMatrix, 0, mopenGl2ColorCameraMatrix, 0);
+			Matrix.MultiplyMM(tempMultMatrix, 0, mColorCamera2IMUMatrix, 0, mOpengl2ColorCameraMatrix, 0);
 			float[] tempInvertMatrix = new float[16];
 			Matrix.SetIdentityM(tempInvertMatrix, 0);
 			Matrix.InvertM(tempInvertMatrix, 0, mDevice2IMUMatrix, 0);
@@ -66,7 +65,7 @@ namespace com.projecttango.tangoutils
 
 			float[] quaternionMatrix = new float[16];
 			Matrix.SetIdentityM(quaternionMatrix, 0);
-			quaternionMatrix = quaternionMatrixopenGl(quaternion);
+			quaternionMatrix = quaternionMatrixOpenGL(quaternion);
 			float[] tempMultMatrix3 = new float[16];
 			Matrix.SetIdentityM(tempMultMatrix3, 0);
 			Matrix.SetIdentityM(mPointCloudModelMatrix, 0);
@@ -89,7 +88,7 @@ namespace com.projecttango.tangoutils
 
 			float[] tempMultMatrix = new float[16];
 			Matrix.SetIdentityM(tempMultMatrix, 0);
-			Matrix.MultiplyMM(tempMultMatrix, 0, mColorCamera2IMUMatrix, 0, mopenGl2ColorCameraMatrix, 0);
+			Matrix.MultiplyMM(tempMultMatrix, 0, mColorCamera2IMUMatrix, 0, mOpengl2ColorCameraMatrix, 0);
 			float[] tempInvertMatrix = new float[16];
 			Matrix.SetIdentityM(tempInvertMatrix, 0);
 			Matrix.InvertM(tempInvertMatrix, 0, mDevice2IMUMatrix, 0);
@@ -99,7 +98,7 @@ namespace com.projecttango.tangoutils
 
 			float[] quaternionMatrix = new float[16];
 			Matrix.SetIdentityM(quaternionMatrix, 0);
-			quaternionMatrix = quaternionMatrixopenGl(quaternion);
+			quaternionMatrix = quaternionMatrixOpenGL(quaternion);
 			float[] tempMultMatrix3 = new float[16];
 			Matrix.SetIdentityM(tempMultMatrix3, 0);
 			Matrix.SetIdentityM(mModelMatrix, 0);
@@ -112,7 +111,7 @@ namespace com.projecttango.tangoutils
 
 		public virtual void SetDevice2IMUMatrix(float[] translation, float[] quaternion)
 		{
-			mDevice2IMUMatrix = quaternionMatrixopenGl(quaternion);
+			mDevice2IMUMatrix = quaternionMatrixOpenGL(quaternion);
 			mDevice2IMUMatrix[12] = translation[0];
 			mDevice2IMUMatrix[13] = translation[1];
 			mDevice2IMUMatrix[14] = translation[2];
@@ -120,8 +119,8 @@ namespace com.projecttango.tangoutils
 
 		public virtual void SetColorCamera2IMUMatrix(float[] translation, float[] quaternion)
 		{
-			mopenGl2ColorCameraMatrix = new float[] {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-			mColorCamera2IMUMatrix = quaternionMatrixopenGl(quaternion);
+			mOpengl2ColorCameraMatrix = new float[] {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+			mColorCamera2IMUMatrix = quaternionMatrixOpenGL(quaternion);
 			mColorCamera2IMUMatrix[12] = translation[0];
 			mColorCamera2IMUMatrix[13] = translation[1];
 			mColorCamera2IMUMatrix[14] = translation[2];
@@ -169,14 +168,14 @@ namespace com.projecttango.tangoutils
 
 		/// <summary>
 		/// A function to convert a quaternion to quaternion Matrix. Please note that
-		/// openGl.Matrix is Column Major and so we construct the matrix in Column
+		/// Opengl.Matrix is Column Major and so we construct the matrix in Column
 		/// Major Format. - - - - | 0 4 8 12 | | 1 5 9 13 | | 2 6 10 14 | | 3 7 11 15
 		/// | - - - -
 		/// </summary>
 		/// <param name="quaternion">
 		///            Input quaternion with float[4] </param>
 		/// <returns> Quaternion Matrix of float[16] </returns>
-		public static float[] quaternionMatrixopenGl(float[] quaternion)
+		public static float[] quaternionMatrixOpenGL(float[] quaternion)
 		{
 			float[] matrix = new float[16];
 			normalizeVector(quaternion);

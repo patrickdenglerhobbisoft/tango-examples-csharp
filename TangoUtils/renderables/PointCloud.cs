@@ -5,27 +5,29 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.Apache.Org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed On an "AS IS" BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 
+
 namespace com.projecttango.tangoutils.renderables
 {
+
     using Java.Nio;
-    using Com.Google.Atap.Tangoservice;
-	using GLES20 = Android.Opengl.GLES20;
+    using Java.Util.Concurrent.Atomic;
+    using GLES20 = Android.Opengl.GLES20;
     using Matrix = Android.Opengl.Matrix;
-    using System.Collections;
-	/// <summary>
-	/// <seealso cref="Renderable"/> openGl showing a PointCloud obtained from Tango XyzIj
-	/// data. The point count can vary over as the information is updated.
-	/// </summary>
-	public class PointCloud : Renderable
+
+    /// <summary>
+    /// <seealso cref="Renderable"/> OpenGL showing a PointCloud obtained from Tango XyzIj
+    /// data. The point count can vary over as the information is updated.
+    /// </summary>
+    public class PointCloud : Renderable
 	{
 
 		private const int COORDS_PER_VERTEX = 3;
@@ -35,7 +37,15 @@ namespace com.projecttango.tangoutils.renderables
 
 		private const int BYTES_PER_FLOAT = 4;
 		private const int POINT_TO_XYZ = 3;
-		private FloatBuffer mVertexBuffer;
+
+		internal int mVertexVBO; // VertexBufferObject.
+		private AtomicBoolean mUpdateVBO = new AtomicBoolean();
+		private volatile  FloatBuffer mPointCloudBuffer;
+        //byte[] bytes = new byte[12];
+        //float[] floats = { 1.5f, 2.5f, 0.000001f };
+
+        //Buffer.BlockCopy(floats, 0, bytes, 0, 12);
+
 		private readonly int mProgram;
 		private int mPosHandle;
 		private int mMVPMatrixHandle;
@@ -52,25 +62,23 @@ namespace com.projecttango.tangoutils.renderables
 			GLES20.GlAttachShader(mProgram, fragShader);
 			GLES20.GlLinkProgram(mProgram);
 			Matrix.SetIdentityM(ModelMatrix, 0);
-			mVertexBuffer = ByteBuffer.AllocateDirect(maxDepthPoints * BYTES_PER_FLOAT * POINT_TO_XYZ).Order(ByteOrder.NativeOrder()).AsFloatBuffer();
+
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final int buffers[] = new int[1];
+			int[] buffers = new int[1];
+			GLES20.GlGenBuffers(1, buffers, 0);
+			mVertexVBO = buffers[0];
 		}
 
-		public virtual void UpdatePoints(byte[] byteArray, int pointCount)
+		public virtual void UpdatePoints(FloatBuffer pointCloudFloatBuffer)
 		{
 			lock (this)
 			{
-				FloatBuffer mPointCloudFloatBuffer;
-				mPointCloudFloatBuffer = ByteBuffer.Wrap( byteArray).Order(ByteOrder.NativeOrder()).AsFloatBuffer();
-				mPointCount = pointCount;
-				mVertexBuffer.Clear();
-				mVertexBuffer.Position(0);
-				mVertexBuffer.Put(mPointCloudFloatBuffer);
-				float totalZ = 0;
-				for (int i = 0; i < mPointCloudFloatBuffer.Capacity() - 3; i = i + 3)
-				{
-					totalZ = totalZ + mPointCloudFloatBuffer.Get(i + 2);
-				}
-				mAverageZ = totalZ / mPointCount;
+				//save the reference in order to update this in the proper thread.
+				mPointCloudBuffer = pointCloudFloatBuffer;
+        
+				//signal the update
+				mUpdateVBO.Set(true);
 			}
 		}
 
@@ -78,18 +86,42 @@ namespace com.projecttango.tangoutils.renderables
 		{
 			lock (this)
 			{
+				GLES20.GlBindBuffer(GLES20.GlArrayBuffer, mVertexVBO);
+        
+				if (mUpdateVBO.GetAndSet(false))
+				{
+					if (mPointCloudBuffer != null)
+					{
+						mPointCloudBuffer.Position(0);
+						// Pass the info to the VBO
+						GLES20.GlBufferData(GLES20.GlArrayBuffer, mPointCloudBuffer.Capacity() * BYTES_PER_FLOAT, mPointCloudBuffer, GLES20.GlStaticDraw);
+						mPointCount = mPointCloudBuffer.Capacity() / 3;
+						float totalZ = 0;
+						for (int i = 0; i < mPointCloudBuffer.Capacity() - 3; i = i + 3)
+						{
+							totalZ = totalZ + mPointCloudBuffer.Get(i + 2);
+						}
+						if (mPointCount != 0)
+						{
+							mAverageZ = totalZ / mPointCount;
+						}
+						// signal the update
+						mUpdateVBO.Set(true);
+					}
+					mPointCloudBuffer = null;
+				}
+        
 				if (mPointCount > 0)
 				{
-					mVertexBuffer.Position(0);
+        
 					GLES20.GlUseProgram(mProgram);
 					updateMvpMatrix(viewMatrix, projectionMatrix);
-					mPosHandle = GLES20.GlGetAttribLocation(mProgram, "vPosition");
-					GLES20.GlVertexAttribPointer(mPosHandle, COORDS_PER_VERTEX, GLES20.GlFloat, false, 0, mVertexBuffer);
+					GLES20.GlVertexAttribPointer(mPosHandle, COORDS_PER_VERTEX, GLES20.GlFloat, false, 0, 0);
 					GLES20.GlEnableVertexAttribArray(mPosHandle);
-					mMVPMatrixHandle = GLES20.GlGetUniformLocation(mProgram, "uMVPMatrix");
 					GLES20.GlUniformMatrix4fv(mMVPMatrixHandle, 1, false, MvpMatrix, 0);
 					GLES20.GlDrawArrays(GLES20.GlPoints, 0, mPointCount);
 				}
+				GLES20.GlBindBuffer(GLES20.GlArrayBuffer, 0);
 			}
 		}
 

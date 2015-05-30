@@ -5,10 +5,10 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.Apache.Org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed On an "AS IS" BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -16,17 +16,15 @@
 
 namespace com.projecttango.tangoutils.renderables
 {
-
-    using Com.Google.Atap.Tangoservice;
+    using Java.Nio;
     using GLES20 = Android.Opengl.GLES20;
     using Matrix = Android.Opengl.Matrix;
 
-    using Java.Nio;
-	/// <summary>
-	/// <seealso cref="Renderable"/> openGl object representing XYZ axes in 3D space. X is Red,
-	/// Y is Green, and Z is Blue.
-	/// </summary>
-	public class CameraFrustumAndAxis : Renderable
+    /// <summary>
+    /// <seealso cref="Renderable"/> OpenGL object representing XYZ axes in 3D space. X is Red,
+    /// Y is Green, and Z is Blue.
+    /// </summary>
+    public class CameraFrustumAndAxis : Renderable
 	{
 
 		private const int COORDS_PER_VERTEX = 3;

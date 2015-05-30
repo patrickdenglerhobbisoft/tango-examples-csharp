@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 
 /*
  * Copyright 2014 HobbiSoft. All Rights Reserved.
@@ -7,25 +7,22 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.Apache.Org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed On an "AS IS" BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+ * limitations under the License.*/
 
 namespace com.projecttango.tangoutils
 {
-    using System;
-    using Log = Android.Util.Log;
-    using Com.Google.Atap.Tangoservice;
-    using Android.Opengl;
-    
-
     using Android.Views;
-    public class Renderer : Java.Lang.Object
+    using Matrix = Android.Opengl.Matrix;
+	using Log = Android.Util.Log;
+	using MotionEvent = Android.Views.MotionEvent;
+
+	public class Renderer
 	{
 
 		protected internal const int FIRST_PERSON = 0;
@@ -99,7 +96,7 @@ namespace com.projecttango.tangoutils
 				Matrix.SetLookAtM(mViewMatrix, 0, mDevicePosition[0] + mCameraPosition[0], mCameraPosition[1] + mDevicePosition[1], mCameraPosition[2] + mDevicePosition[2], mDevicePosition[0], mDevicePosition[1], mDevicePosition[2], 0f, 1f, 0f);
 				break;
 			case TOP_DOWN:
-				Matrix.SetIdentityM(mViewMatrix, 0);
+				// Matrix.SetIdentityM(mViewMatrix, 0);
 				Matrix.SetLookAtM(mViewMatrix, 0, mDevicePosition[0] + mCameraPosition[0], mCameraPosition[1], mCameraPosition[2] + mDevicePosition[2], mDevicePosition[0] + mCameraPosition[0], mCameraPosition[1] - 5, mCameraPosition[2] + mDevicePosition[2], 0f, 0f, -1f);
 				break;
 			default:
@@ -108,21 +105,23 @@ namespace com.projecttango.tangoutils
 			}
 		}
 
-		public virtual bool OnTouchEvent(MotionEvent args)
+		public virtual bool onTouchEvent(MotionEvent @event)
 		{
 			if (viewId == THIRD_PERSON)
 			{
-				int pointCount = args.PointerCount;
+				int pointCount = @event.PointerCount;
 				if (pointCount == 1)
 				{
-					switch (args.Action)
+					switch (@event.Action)
 					{
-					case MotionEventActions.Down:
-					{
-
-						float x = args.GetX();
-
-						float y = args.GetY();
+                        case MotionEventActions.Down:
+                            {
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float x = event.GetX();
+						float x = @event.GetX();
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float y = event.GetY();
+						float y = @event.GetY();
 						// Remember where we started
 						mPreviousTouchX = x;
 						mPreviousTouchY = y;
@@ -130,20 +129,20 @@ namespace com.projecttango.tangoutils
 						mPreviousRotationY = mRotationY;
 						break;
 					}
-                        case MotionEventActions.Move:
+					case MotionEventActions.Move:
 					{
-
-           // Original line in class:  final float x = event.GetX()();
-						float x = args.GetX();
-
-           // Original line in class:  final float y = event.GetY()();
-						float y = args.GetY();
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float x = event.GetX();
+						float x = @event.GetX();
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float y = event.GetY();
+						float y = @event.GetY();
 						// Calculate the distance moved
-
-           // Original line in class:  final float dx = mPreviousTouchX - x;
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float dx = mPreviousTouchX - x;
 						float dx = mPreviousTouchX - x;
-
-           // Original line in class:  final float dy = mPreviousTouchY - y;
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float dy = mPreviousTouchY - y;
 						float dy = mPreviousTouchY - y;
 						mRotationX = mPreviousRotationX + (float)(Math.PI * dx / 1900); // ScreenWidth
 						mRotationY = mPreviousRotationY + (float)(Math.PI * dy / 1200); // Screen height
@@ -164,27 +163,25 @@ namespace com.projecttango.tangoutils
 				}
 				if (pointCount == 2)
 				{
-					switch (args.ActionMasked)
+					switch (@event.ActionMasked)
 					{
-                            
-
-                    case MotionEventActions.Down:
-                    case MotionEventActions.Pointer1Down:
-					{
-						mTouch1X = args.GetX(0);
-						mTouch1Y = args.GetY(0);
-						mTouch2X = args.GetX(1);
-						mTouch2Y = args.GetY(1);
+					case MotionEventActions.Down:
+                    case MotionEventActions.PointerDown:
+                    {
+						mTouch1X = @event.GetX(0);
+						mTouch1Y = @event.GetY(0);
+						mTouch2X = @event.GetX(1);
+						mTouch2Y = @event.GetY(1);
 						mTouchStartDistance = (float) Math.Sqrt(Math.Pow(mTouch1X - mTouch2X, 2) + Math.Pow(mTouch1Y - mTouch2Y, 2));
 						mStartCameraRadius = mCameraOrbitRadius;
 						break;
 					}
-                        case MotionEventActions.Move:
+					case MotionEventActions.Move:
 					{
-						mTouch1X = args.GetX(0);
-						mTouch1Y = args.GetY(0);
-						mTouch2X = args.GetX(1);
-						mTouch2Y = args.GetY(1);
+						mTouch1X = @event.GetX(0);
+						mTouch1Y = @event.GetY(0);
+						mTouch2X = @event.GetX(1);
+						mTouch2Y = @event.GetY(1);
 						mTouchMoveDistance = (float) Math.Sqrt(Math.Pow(mTouch1X - mTouch2X, 2) + Math.Pow(mTouch1Y - mTouch2Y, 2));
 						float tmp = 0.05f * (mTouchMoveDistance - mTouchStartDistance);
 						mCameraOrbitRadius = mStartCameraRadius - tmp;
@@ -197,15 +194,15 @@ namespace com.projecttango.tangoutils
 						mCameraPosition[2] = (float)(mCameraOrbitRadius * Math.Cos(mRotationX));
 						break;
 					}
-                        case MotionEventActions.Pointer1Up:
+					case MotionEventActions.PointerUp:
 					{
-						int index = args.ActionIndex == 0 ? 1 : 0;
-
-
-						float x = args.GetX(index);
-
-
-						float y = args.GetY(index);
+						int index = @event.ActionIndex == 0 ? 1 : 0;
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float x = event.GetX(index);
+						float x = @event.GetX(index);
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float y = event.GetY(index);
+						float y = @event.GetY(index);
 						// Remember where we started
 						mPreviousTouchX = x;
 						mPreviousTouchY = y;
@@ -218,19 +215,19 @@ namespace com.projecttango.tangoutils
 			}
 			else if (viewId == TOP_DOWN)
 			{
-				int pointCount = args.PointerCount;
+				int pointCount = @event.PointerCount;
 				if (pointCount == 1)
 				{
-					switch (args.Action)
+					switch (@event.Action)
 					{
-					case MotionEventActions.Down:
-					{
-
-           // Original line in class:  final float x = event.GetX()();
-						float x = args.GetX();
-
-           // Original line in class:  final float y = event.GetY()();
-						float y = args.GetY();
+                        case MotionEventActions.Down:
+                    {
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float x = event.GetX();
+						float x = @event.GetX();
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float y = event.GetY();
+						float y = @event.GetY();
 						// Remember where we started
 						mPreviousTouchX = x;
 						mPreviousTouchY = y;
@@ -240,18 +237,18 @@ namespace com.projecttango.tangoutils
 					}
 					case MotionEventActions.Move:
 					{
-
-           // Original line in class:  final float x = event.GetX()();
-						float x = args.GetX();
-
-           // Original line in class:  final float y = event.GetY()();
-                        float y = args.GetY();
+                                //JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+                                //ORIGINAL LINE: final float x = event.GetX();
+                                float x = @event.GetX();
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float y = event.GetY();
+						float y = @event.GetY();
 						// Calculate the distance moved
-
-           // Original line in class:  final float dx = mPreviousTouchX - x;
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float dx = mPreviousTouchX - x;
 						float dx = mPreviousTouchX - x;
-
-           // Original line in class:  final float dy = mPreviousTouchY - y;
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float dy = mPreviousTouchY - y;
 						float dy = mPreviousTouchY - y;
 						mCameraPosition[0] = mPreviousRotationX + dx / 190;
 						mCameraPosition[2] = mPreviousRotationY + dy / 120;
@@ -261,41 +258,40 @@ namespace com.projecttango.tangoutils
 				}
 				if (pointCount == 2)
 				{
-					switch (args.ActionMasked)
+					switch (@event.ActionMasked)
 					{
-					case MotionEventActions.Down:
-					case MotionEventActions.Pointer1Down:
-					{
-						mTouch1X = args.GetX(0);
-						mTouch1Y = args.GetY(0);
-						mTouch2X = args.GetX(1);
-						mTouch2Y = args.GetY(1);
+                    case MotionEventActions.Down:
+                        case MotionEventActions.PointerDown:
+                    {
+						mTouch1X = @event.GetX(0);
+						mTouch1Y = @event.GetY(0);
+						mTouch2X = @event.GetX(1);
+						mTouch2Y = @event.GetY(1);
 						mTouchStartDistance = (float) Math.Sqrt(Math.Pow(mTouch1X - mTouch2X, 2) + Math.Pow(mTouch1Y - mTouch2Y, 2));
 						mStartCameraRadius = mCameraPosition[1];
 						Log.Info("Start Radius is :", "" + mStartCameraRadius);
 						break;
 					}
-					case MotionEventActions.Move:
-					{
-						mTouch1X = args.GetX(0);
-						mTouch1Y = args.GetY(0);
-						mTouch2X = args.GetX(1);
-						mTouch2Y = args.GetY(1);
+                    case MotionEventActions.Move:
+                    {
+						mTouch1X = @event.GetX(0);
+						mTouch1Y = @event.GetY(0);
+						mTouch2X = @event.GetX(1);
+						mTouch2Y = @event.GetY(1);
 						mTouchMoveDistance = (float) Math.Sqrt(Math.Pow(mTouch1X - mTouch2X, 2) + Math.Pow(mTouch1Y - mTouch2Y, 2));
 						float tmp = 0.05f * (mTouchMoveDistance - mTouchStartDistance);
 						mCameraPosition[1] = mStartCameraRadius - tmp;
 						break;
 					}
-                            
-					case MotionEventActions.Pointer1Up:
-					{
-						int index = args.ActionIndex == 0 ? 1 : 0;
-
-
-						float x = args.GetX(index);
-
-
-						float y = args.GetY(index);
+                    case MotionEventActions.PointerUp:
+                    {
+						int index = @event.ActionIndex == 0 ? 1 : 0;
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float x = event.GetX(index);
+						float x = @event.GetX(index);
+//JAVA TO C# CONVERTER WARNING: The original Java variable was marked 'final':
+//ORIGINAL LINE: final float y = event.GetY(index);
+						float y = @event.GetY(index);
 						// Remember where we started
 						mPreviousTouchX = x;
 						mPreviousTouchY = y;
@@ -309,13 +305,13 @@ namespace com.projecttango.tangoutils
 			return true;
 		}
 
-		public virtual void SetFirstPersonView()
+		public virtual void setFirstPersonView()
 		{
 			viewId = FIRST_PERSON;
 			Matrix.PerspectiveM(mProjectionMatrix, 0, CAMERA_FOV, mCameraAspect, CAMERA_NEAR, CAMERA_FAR);
 		}
 
-		public virtual void SetThirdPersonView()
+		public virtual void setThirdPersonView()
 		{
 			viewId = THIRD_PERSON;
 			mCameraPosition[0] = 5;
@@ -326,7 +322,7 @@ namespace com.projecttango.tangoutils
 			Matrix.PerspectiveM(mProjectionMatrix, 0, THIRD_PERSON_FOV, mCameraAspect, CAMERA_NEAR, CAMERA_FAR);
 		}
 
-		public virtual void SetTopDownView()
+		public virtual void setTopDownView()
 		{
 			viewId = TOP_DOWN;
 			mCameraPosition[0] = 0;

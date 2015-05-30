@@ -7,10 +7,10 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.Apache.Org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed On an "AS IS" BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -18,16 +18,15 @@
 
 namespace com.projecttango.tangoutils.renderables
 {
-    using Com.Google.Atap.Tangoservice;
     using Java.Nio;
 
+
     using GLES20 = Android.Opengl.GLES20;
-    using Matrix = Android.Opengl.Matrix;
-    using Log = Android.Util.Log;
-	//using Log = Android.Util.Log;
+	using Matrix = Android.Opengl.Matrix;
+	using Log = Android.Util.Log;
 
 	/// <summary>
-	/// <seealso cref="Renderable"/> openGl object showing the Trajectory of the Project Tango
+	/// <seealso cref="Renderable"/> OpenGL object showing the Trajectory of the Project Tango
 	/// device in 3D space. Points are added when the trajectory is updated by
 	/// passing translation data obtained from Tango Pose Data.
 	/// </summary>
@@ -46,7 +45,7 @@ namespace com.projecttango.tangoutils.renderables
 		private static readonly string TAG = typeof(Trajectory).Name;
 		private string mVertexShaderCode = "uniform mat4 uMVPMatrix;" + "attribute vec4 vPosition;" + "uniform vec4 aColor;" + "varying vec4 vColor;" + "void main() {" + "gl_PointSize = 5.0;" + "vColor=aColor;" + "gl_Position = uMVPMatrix * vPosition;" + "}";
 		private string mFragmentShaderCode = "precision mediump float;" + "varying vec4 vColor;" + "void main() {" + "gl_FragColor = vColor;" + "}";
-		private FloatBuffer mVertexBuffer;
+        private FloatBuffer mVertexBuffer;
 		private float[] mColor = new float[] {0.22f, 0.28f, 0.67f, 1.0f};
 		private readonly int mProgram;
 		private int mPosHandle;
@@ -74,7 +73,7 @@ namespace com.projecttango.tangoutils.renderables
 			GLES20.GlLinkProgram(mProgram);
 		}
 
-		// float[] color should contain Only 4 elements.
+		// float[] color should contain only 4 elements.
 		public Trajectory(int lineWidth, float[] color)
 		{
 			mLineWidth = lineWidth;
@@ -101,7 +100,7 @@ namespace com.projecttango.tangoutils.renderables
 			mVertexBuffer.Position(mTrajectoryCount * 3);
 			if (((mTrajectoryCount + 1) * 3) >= MAX_VERTICES)
 			{
-				Log.Wtf(TAG, "Clearing float buffer");
+				Log.Warn(TAG, "Clearing float buffer");
 				resetPath();
 			}
 			float dx = 0, dy = 0, dz = 0;
@@ -111,7 +110,7 @@ namespace com.projecttango.tangoutils.renderables
 				dy = mVertexBuffer.Get(mVertexBuffer.Position() - 2) - translation[2];
 				dz = mVertexBuffer.Get(mVertexBuffer.Position() - 1) - (-translation[1]);
 			}
-			catch (Java.Lang.IndexOutOfBoundsException e)
+			catch (System.IndexOutOfRangeException)
 			{
 				mVertexBuffer.Put(new float[] {translation[0], translation[2], -translation[1]});
 				mTrajectoryCount++;

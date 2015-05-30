@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ModelMatCalculator.cs" />
+    <Compile Include="renderables\ByteBuffer.cs" />
     <Compile Include="renderables\CameraFrustum.cs" />
     <Compile Include="renderables\CameraFrustumAndAxis.cs" />
     <Compile Include="renderables\Grid.cs" />
