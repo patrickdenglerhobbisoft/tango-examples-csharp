@@ -20,32 +20,36 @@ using System.Collections.Generic;
 namespace com.projecttango.motiontrackingcsharp
 {
 
-    
-    using OnTangoUpdateListener = Com.Google.Atap.Tangoservice.ITangoListener;
+
+    //using OnTangoUpdateListener = Com.Google.Atap.Tangoservice.ITangoListener;
     using Android.App;
     using Com.Google.Atap.Tangoservice;
     using Android.Content;
     using Android.Views;
     using Android.OS;
     using Android.Widget;
-	using Android.Content.PM;
-	using NameNotFoundException = Android.Content.PM.PackageManager.NameNotFoundException;
-	using Android.Opengl;
+    using Android.Content.PM;
+    using NameNotFoundException = Android.Content.PM.PackageManager.NameNotFoundException;
+    using Android.Opengl;
     using Android.Util;
     using GLSurfaceView = Android.Opengl.GLSurfaceView;
 
-	/// <summary>
-	/// Main Activity class for the Motion Tracking API Sample. Handles the
-	/// connection to the Tango service and propagation of Tango pose data to OpenGL
-	/// and Layout views. OpenGL rendering logic is delegated to the
-	/// <seealso cref="MTGLRenderer"/> class.
-	/// </summary>
+
+
+
+
+    /// <summary>
+    /// Main Activity class for the Motion Tracking API Sample. Handles the
+    /// connection to the Tango service and propagation of Tango pose data to OpenGL
+    /// and Layout views. OpenGL rendering logic is delegated to the
+    /// <seealso cref="MTGLRenderer"/> class.
+    /// </summary>
     /// 
 
     [Activity(Label = "MotionTracking",
                Icon = "@drawable/icon")]
 	public class MotionTracking : Activity, View.IOnClickListener
-	{
+    {
  
 		private static string TAG = typeof(MotionTracking).Name;
         static int SECS_TO_MILLISECS = 1000;
@@ -66,15 +70,19 @@ namespace com.projecttango.motiontrackingcsharp
         private bool mIsAutoRecovery;
         private MTGLRenderer mRenderer;
         private GLSurfaceView mGLView;
+        static string KEY_MOTIONTRACKING_AUTORECOVER = "com.projecttango.experiments.csharpmotiontracking.useautorecover";
         private  string _TAG;
-		protected override void OnCreate(Bundle savedInstanceState)
+
+        
+        
+        protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
             var layOut = Resource.Layout.activity_motion_tracking;
             _TAG = this.GetType().Name;
             SetContentView(layOut);
 			Intent intent = Intent;
-            mIsAutoRecovery = intent.GetBooleanExtra(com.projecttango.motiontrackingcsharp.StartActivity.KEY_MOTIONTRACKING_AUTORECOVER, false);
+            mIsAutoRecovery = intent.GetBooleanExtra(KEY_MOTIONTRACKING_AUTORECOVER, false);
 			// Text views for displaying translation and rotation data
 			mPoseTextView = (TextView) FindViewById(Resource.Id.pose);
 			mQuatTextView = (TextView) FindViewById(Resource.Id.quat);
@@ -165,7 +173,7 @@ namespace com.projecttango.motiontrackingcsharp
             List<TangoCoordinateFramePair> framePairs = new List<TangoCoordinateFramePair>();
             framePairs.Add(new TangoCoordinateFramePair(TangoPoseData.CoordinateFrameStartOfService, TangoPoseData.CoordinateFrameDevice));
             // Listen for new Tango data
-            var listener = new TangoProxy.TangoListener(this);
+            var listener = new  TangoProxy.TangoListener(this);
             listener.OnPoseAvailableCallback = OnPoseAvailable;
             listener.OnTangoEventCallBack = OnTangoEvent;
 
@@ -234,10 +242,6 @@ namespace com.projecttango.motiontrackingcsharp
            
         }
 
-        void IDisposable.Dispose()
-        {
-            //  throw new NotImplementedException();  TODO Anything to dispose?
-        }
      
 
 		private void motionReset()
@@ -293,13 +297,13 @@ namespace com.projecttango.motiontrackingcsharp
 			switch (v.Id)
 			{
 			case Resource.Id.first_person_button:
-				mRenderer.SetFirstPersonView();
+				mRenderer.setFirstPersonView();
 				break;
 			case Resource.Id.top_down_button:
-				mRenderer.SetTopDownView();
+				mRenderer.setTopDownView();
 				break;
 			case Resource.Id.third_person_button:
-				mRenderer.SetThirdPersonView();
+				mRenderer.setThirdPersonView();
 				break;
 			case Resource.Id.resetmotion:
 				motionReset();
@@ -312,7 +316,7 @@ namespace com.projecttango.motiontrackingcsharp
 
 		public override bool OnTouchEvent(MotionEvent args)
 		{
-			return mRenderer.OnTouchEvent(args);
+			return mRenderer.onTouchEvent(args);
 		}
 
 		private void SetUpExtrinsics()

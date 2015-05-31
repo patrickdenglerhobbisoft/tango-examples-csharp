@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2014 HobbiSoft. All Rights Reserved.
+ * Copyright 2014 Google Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,60 +16,65 @@
 
 namespace com.projecttango.motiontrackingcsharp
 {
-    using Com.Google.Atap.Tangoservice;
-    
-    using Android.Content;
-    using Android.Widget;
-  
-    using Android.Views;
+
+    using Tango = Com.Google.Atap.Tangoservice.Tango;
+
+    using Activity = Android.App.Activity;
+    using Intent = Android.Content.Intent;
+    using Bundle = Android.OS.Bundle;
+    using View = Android.Views.View;
+    using Button = Android.Widget.Button;
+    using Toast = Android.Widget.Toast;
+    using ToggleButton = Android.Widget.ToggleButton;
     using Android.App;
-    using Android.OS;
-   
-    [Activity(Label = "MotionTracking", 
-        MainLauncher = true, 
-        Icon = "@drawable/icon")]
-	public class StartActivity : Activity, View.IOnClickListener
+
+
+    /// <summary>
+    /// Application's entry point where the user gets to select a certain configuration and start the
+    /// next activity.
+    /// </summary>
+    [Activity(Label = "MotionTracking",
+     MainLauncher = true,
+     Icon = "@drawable/icon")]
+    public class StartActivity : Activity, View.IOnClickListener
 	{
-		public const string KEY_MOTIONTRACKING_AUTORECOVER = "com.projecttango.motiontrackingcsharp.useautorecover";
-		public const string EXTRA_KEY_PERMISSIONTYPE = "PERMISSIONTYPE";
-		public const string EXTRA_VALUE_MOTION_TRACKING = "MOTION_TRACKING_PERMISSION";
+		public static string KEY_MOTIONTRACKING_AUTORECOVER = "com.projecttango.experiments.csharpmotiontracking.useautorecover";
 		private ToggleButton mAutoResetButton;
 		private Button mStartButton;
 		private bool mUseAutoReset;
 
-        
 		protected  override void OnCreate(Bundle savedInstanceState)
 		{
-            base.OnCreate(savedInstanceState);  // TODO Is Based requured here?
+			base.OnCreate(savedInstanceState);
+			StartActivityForResult(Tango.GetRequestPermissionIntent(Tango.PermissiontypeMotionTracking), Tango.TangoIntentActivitycode);
+            SetContentView(motiontrackingcsharp.Resource.Layout.start);
            
-            Intent permissionIntent = new Intent();
-            permissionIntent.SetAction( "android.intent.action.REQUEST_TANGO_PERMISSION");
-            permissionIntent.PutExtra(EXTRA_KEY_PERMISSIONTYPE, EXTRA_VALUE_MOTION_TRACKING);
-            StartActivityForResult(permissionIntent, Tango.TangoIntentActivitycode);
-            SetContentView(Resource.Layout.start);
-          
-            this.Title = GetString(Resource.String.app_name);
-            mAutoResetButton = (ToggleButton)FindViewById(Resource.Id.autoresetbutton);
-            mStartButton = (Button)FindViewById(Resource.Id.startbutton);
-            mAutoResetButton.Click += mAutoResetButton_Click;
-            mStartButton.Click += mAutoResetButton_Click;
-            mUseAutoReset = mAutoResetButton.Checked;
+			mAutoResetButton = (ToggleButton) FindViewById(motiontrackingcsharp.Resource.Id.autoresetbutton);
+			mStartButton = (Button) FindViewById(motiontrackingcsharp.Resource.Id.startbutton);
+            mAutoResetButton.Click += MAutoResetButton_Click;
+            mStartButton.Click += MStartButton_Click;
+			mStartButton.SetOnClickListener( this);
+			mUseAutoReset = mAutoResetButton.Checked;
 		}
 
-        void mAutoResetButton_Click(object sender, System.EventArgs e)
+        private void MStartButton_Click(object sender, System.EventArgs e)
         {
-            // proxy between onclick signatures
             OnClick(sender as View);
         }
 
-		public  void OnClick(View v)
+        private void MAutoResetButton_Click(object sender, System.EventArgs e)
+        {
+            OnClick(sender as View);
+        }
+
+        public void OnClick(View v)
 		{
 			switch (v.Id)
 			{
-			case Resource.Id.startbutton:
+			case motiontrackingcsharp.Resource.Id.startbutton:
 				startMotionTracking();
 				break;
-			case Resource.Id.autoresetbutton:
+			case motiontrackingcsharp.Resource.Id.autoresetbutton:
 				mUseAutoReset = mAutoResetButton.Checked;
 				break;
 			}
@@ -77,11 +82,12 @@ namespace com.projecttango.motiontrackingcsharp
 
 		private void startMotionTracking()
 		{
-			Intent startmotiontracking = new Intent(this, typeof(MotionTracking));
+			Intent startmotiontracking = new Intent(this, typeof(com.projecttango.motiontrackingcsharp.MotionTracking));
 			startmotiontracking.PutExtra(KEY_MOTIONTRACKING_AUTORECOVER, mUseAutoReset);
 			StartActivity(startmotiontracking);
 		}
-        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+
+		protected override  void OnActivityResult(int requestCode, Result resultCode, Intent data)
 		{
 			// Check which request we're responding to
 			if (requestCode == Tango.TangoIntentActivitycode)
@@ -89,7 +95,7 @@ namespace com.projecttango.motiontrackingcsharp
 				// Make sure the request was successful
 				if (resultCode == Result.Canceled)
 				{
-					Toast.MakeText(this, Resource.String.motiontrackingpermission, Android.Widget.ToastLength.Short).Show();
+					Toast.MakeText(this, motiontrackingcsharp.Resource.String.motiontrackingpermission, Android.Widget.ToastLength.Short).Show();
 					Finish();
 				}
 			}

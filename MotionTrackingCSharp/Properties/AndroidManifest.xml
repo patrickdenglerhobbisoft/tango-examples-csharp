@@ -1,8 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="MotionTrackingCSharp.MotionTrackingCSharp" android:versionCode="1" android:versionName="1.0">
-	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="21" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="MotionTrackingCSharp.MotionTrackingCSharp" android:installLocation="auto">
+	<uses-sdk />
 	<application android:label="MotionTrackingCSharp" android:icon="@drawable/Icon">
 		<activity android:name=".StartActivity" android:screenOrientation="landscape" android:icon="@drawable/Icon"></activity>
 		<activity android:name="com.projecttango.motiontrackingcsharp" android:label="@string/app_name" android:screenOrientation="landscape"></activity>
 	</application>
+	<uses-permission android:name="android.permission.BODY_SENSORS" />
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT" />
+	<uses-permission android:name="android.permission.CAPTURE_SECURE_VIDEO_OUTPUT" />
+	<uses-permission android:name="android.permission.CAPTURE_VIDEO_OUTPUT" />
+	<uses-permission android:name="android.permission.CONTROL_LOCATION_UPDATES" />
+	<uses-permission android:name="android.permission.DELETE_CACHE_FILES" />
+	<uses-permission android:name="android.permission.INSTALL_PACKAGES" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.LOCATION_HARDWARE" />
+	<uses-permission android:name="android.permission.MOUNT_FORMAT_FILESYSTEMS" />
+	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+	<uses-permission android:name="android.permission.READ_FRAME_BUFFER" />
+	<uses-permission android:name="android.permission.READ_INPUT_STATE" />
+	<uses-permission android:name="android.permission.READ_OWNER_DATA" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.RECORD_AUDIO" />
+	<uses-permission android:name="android.permission.RESTART_PACKAGES" />
+	<uses-permission android:name="android.permission.SET_ACTIVITY_WATCHER" />
+	<uses-permission android:name="android.permission.SET_ALWAYS_FINISH" />
+	<uses-permission android:name="android.permission.SET_ANIMATION_SCALE" />
+	<uses-permission android:name="android.permission.SIGNAL_PERSISTENT_PROCESSES" />
+	<uses-permission android:name="android.permission.TRANSMIT_IR" />
+	<uses-permission android:name="android.permission.USE_CREDENTIALS" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
+	<uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
+	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
+	<uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
 </manifest>

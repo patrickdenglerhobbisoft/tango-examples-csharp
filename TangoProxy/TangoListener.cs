@@ -26,7 +26,9 @@ namespace TangoProxy
     using System.Collections.Generic;
     using Android.Util;
     using Com.Google.Atap.Tangoservice;
-    
+    using System;
+
+
     /// <summary>
     /// TangoListener class for use with com.projectango.net
     /// 
@@ -129,7 +131,12 @@ namespace TangoProxy
                     OnXyzIjAvailableCallBack(args);
                 });
         }
-#endregion
+
+        void Tango.IOnTangoUpdateListener.OnFrameAvailable(int p0)
+        {
+         //a   throw new Exception("Frame Available";
+        }
+        #endregion
     }
 
 }

@@ -18,8 +18,7 @@
     <AndroidSupportedAbis>armeabi-v7a%3bx86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
-    <TargetFrameworkVersion>
-    </TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
     <SccProjectName>SAK</SccProjectName>
@@ -91,9 +90,13 @@
     <TransformFile Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TangoProxy\TangoProxy.csproj">
-      <Project>{24713049-ae72-4185-865c-81131ce0ea51}</Project>
-      <Name>TangoProxy</Name>
+    <ProjectReference Include="..\TangoProxy2\TangoProxy2.csproj">
+      <Project>{3247133c-76b9-424c-bcb7-264238373973}</Project>
+      <Name>TangoProxy2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TangoUtils\TangoUtils.csproj">
+      <Project>{04a2de5b-151a-4d53-b72f-1e425247c4c5}</Project>
+      <Name>TangoUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />

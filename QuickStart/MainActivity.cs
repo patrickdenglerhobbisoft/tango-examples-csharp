@@ -83,7 +83,7 @@ namespace com.projecttango.quickstartcsharp
             // is brought to the foreground.
             base.OnResume();
             Intent permissionIntent = new Intent();
-            permissionIntent.SetAction("android.intent.action.REQUEST_TANGO_PERMISSION");
+            permissionIntent.SetAction("android.Intent.action.REQUEST_TANGO_PERMISSION");
             permissionIntent.PutExtra(EXTRA_KEY_PERMISSIONTYPE, EXTRA_VALUE_MOTION_TRACKING);
             if (!mIsTangoServiceConnected)
             {
