@@ -54,7 +54,8 @@ namespace com.projecttango.videooverlaysample
             {
                 TangoConfig config = new TangoConfig();
                 config = mTango.GetConfig(TangoConfig.ConfigTypeCurrent);
-                mTango.ConnectSurface(0, surface);
+                // TODO : Verify Connect doesn't require new set up without ConnectSurface
+                //mTango.ConnectSurface(0, surface);
                 mTango.Connect(config);
             }
         }

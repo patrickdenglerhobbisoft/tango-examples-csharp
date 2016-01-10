@@ -29,7 +29,7 @@ namespace com.projecttango.quickstartcsharp
     using Android.Views;
     using Android.OS;
     using Android.Widget;
-
+    using TangoProxy;
     /// <summary>
     /// Main Activity for the Tango  Quickstart. Demonstrates establishing a
     /// connection to the <seealso cref="Tango"/> service and printing the <seealso cref="TangoPose"/>
@@ -191,8 +191,8 @@ namespace com.projecttango.quickstartcsharp
             });
         }
 
-
-        public void OnXyzIjAvailable(TangoXyzIjData arg0)
+   
+        public void OnXyzIjAvailableCallbackFunc(TangoXyzIjData arg0)
         {
             // Ignoring XyzIj data
         }

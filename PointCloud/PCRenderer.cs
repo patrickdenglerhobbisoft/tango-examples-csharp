@@ -16,7 +16,7 @@
 
 namespace com.projecttango.pointcloudcsharp
 {
-   
+
     using Android.Content;
     using Android.Widget;
     using Android.Views;
@@ -24,23 +24,24 @@ namespace com.projecttango.pointcloudcsharp
     using Android.OS;
     using Com.Google.Atap.Tangoservice;
     using com.projecttango.tangoutils;
-	using com.projecttango.tangoutils.renderables;
-	using Android.Opengl;
-	
-	/// <summary>
-	/// OpenGL rendering class for the Motion Tracking API sample. This class
-	/// managers the objects visible in the OpenGL view which are the
-	/// <seealso cref="CameraFrustum"/>, <seealso cref="PointCloud"/> and the <seealso cref="Grid"/>. These objects
-	/// are implemented in the TangoUtils library in the package
-	/// <seealso cref="com.projecttango.tangoutils.renderables"/>.
-	/// 
-	/// This class receives <seealso cref="TangoPose"/> data from the <seealso cref="MotionTracking"/>
-	/// class and updates the model and view matrices of the <seealso cref="Renderable"/>
-	/// objects appropriately. It also handles the user-selected camera view, which
-	/// can be 1st person, 3rd person, or top-down.
-	/// 
-	/// </summary>
-	public class PCRenderer  :  Renderer,  GLSurfaceView.IRenderer
+    using com.projecttango.tangoutils.renderables;
+    using Android.Opengl;
+    using System;
+
+    /// <summary>
+    /// OpenGL rendering class for the Motion Tracking API sample. This class
+    /// managers the objects visible in the OpenGL view which are the
+    /// <seealso cref="CameraFrustum"/>, <seealso cref="PointCloud"/> and the <seealso cref="Grid"/>. These objects
+    /// are implemented in the TangoUtils library in the package
+    /// <seealso cref="com.projecttango.tangoutils.renderables"/>.
+    /// 
+    /// This class receives <seealso cref="TangoPose"/> data from the <seealso cref="MotionTracking"/>
+    /// class and updates the model and view matrices of the <seealso cref="Renderable"/>
+    /// objects appropriately. It also handles the user-selected camera view, which
+    /// can be 1st person, 3rd person, or top-down.
+    /// 
+    /// </summary>
+    public class PCRenderer  :  Renderer,  GLSurfaceView.IRenderer
 	{
 
 		private PointCloud mPointCloud;
@@ -89,7 +90,13 @@ namespace com.projecttango.pointcloudcsharp
 			}
 		}
 
-        
+        public IntPtr Handle
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         void System.IDisposable.Dispose()
         {

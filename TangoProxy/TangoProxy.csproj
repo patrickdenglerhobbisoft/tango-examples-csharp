@@ -50,6 +50,12 @@
   <ItemGroup>
     <EmbeddedJar Include="Jars\TangoSDK_Nash.jar" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Jars\TangoUX_Capella_Java.aar" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedJar Include="Jars\TangoSDK_Capella_Java.jar" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.Bindings.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

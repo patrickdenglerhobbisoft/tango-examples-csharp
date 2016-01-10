@@ -19,22 +19,23 @@ namespace com.projecttango.areadescriptioncsharp
 
     using Javax.Microedition.Khronos.Egl;
     using Javax.Microedition.Khronos.Opengles;
-	using com.projecttango.tangoutils;
+    using com.projecttango.tangoutils;
 
-	using com.projecttango.tangoutils.renderables;
+    using com.projecttango.tangoutils.renderables;
 
-	using Android.Opengl;
- 
-	/// <summary>
-	/// OpenGL rendering class for the AreaDescription API sample. This class manages
-	/// the objects visible in the OpenGL view which are the <seealso cref="CameraFrustum"/>,
-	/// <seealso cref="CameraFrustumAndAxis"/>, <seealso cref="Trajectory"/>, and the <seealso cref="Grid"/>. These
-	/// objects are implemented in the TangoUtils library in the package
-	/// <seealso cref="com.projecttango.tangoutils.renderables"/>.
-	/// 
-	/// This class receives also handles the user-selected camera view, which can be
-	/// 1st person, 3rd person, or top-down.
-	/// </summary>
+    using Android.Opengl;
+    using System;
+
+    /// <summary>
+    /// OpenGL rendering class for the AreaDescription API sample. This class manages
+    /// the objects visible in the OpenGL view which are the <seealso cref="CameraFrustum"/>,
+    /// <seealso cref="CameraFrustumAndAxis"/>, <seealso cref="Trajectory"/>, and the <seealso cref="Grid"/>. These
+    /// objects are implemented in the TangoUtils library in the package
+    /// <seealso cref="com.projecttango.tangoutils.renderables"/>.
+    /// 
+    /// This class receives also handles the user-selected camera view, which can be
+    /// 1st person, 3rd person, or top-down.
+    /// </summary>
     public class ADRenderer : Renderer, GLSurfaceView.IRenderer
 	{
 
@@ -69,6 +70,13 @@ namespace com.projecttango.areadescriptioncsharp
 			}
 		}
 
+        public IntPtr Handle
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public void OnDrawFrame(IGL10 gl)
         {
@@ -100,6 +108,41 @@ namespace com.projecttango.areadescriptioncsharp
             Matrix.SetLookAtM(mViewMatrix, 0, 5f, 5f, 5f, 0f, 0f, 0f, 0f, 1f, 0f);
             mCameraFrustumAndAxis.ModelMatrix = ModelMatCalculator.ModelMatrix;
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~ADRenderer() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 
 }

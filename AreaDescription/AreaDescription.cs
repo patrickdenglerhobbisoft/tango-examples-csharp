@@ -300,7 +300,7 @@ namespace com.projecttango.areadescriptioncsharp
 
 			metadata = mTango.LoadAreaDescriptionMetaData(uuids);
 			metadata.Set("name", (byte[])(System.Array)name.GetBytes());
-            var l = metadata.Data.GetStringArrayList(null);
+          //  var l = metadata.ToArray<string>();
 			mTango.SaveAreaDescriptionMetadata(uuids, metadata);
 			Toast.MakeText(ApplicationContext, GetString(Resource.String.adf_save) + uuids, Android.Widget.ToastLength.Short).Show();
 		}
@@ -450,13 +450,13 @@ namespace com.projecttango.areadescriptioncsharp
 			switch (v.Id)
 			{
 			case Resource.Id.first_person_button:
-				mRenderer.SetFirstPersonView();
+				mRenderer.setFirstPersonView();
 				break;
 			case Resource.Id.top_down_button:
-				mRenderer.SetTopDownView();
+				mRenderer.setTopDownView();
 				break;
 			case Resource.Id.third_person_button:
-				mRenderer.SetThirdPersonView();
+				mRenderer.setThirdPersonView();
 				break;
 			case Resource.Id.saveAdf:
 				saveAdf();
@@ -469,7 +469,7 @@ namespace com.projecttango.areadescriptioncsharp
 
 		public override bool OnTouchEvent(MotionEvent args)
 		{
-			return mRenderer.OnTouchEvent(args);
+			return mRenderer.onTouchEvent(args);
 		}
 	}
 

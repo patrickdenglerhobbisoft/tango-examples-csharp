@@ -215,13 +215,13 @@ namespace com.projecttango.pointcloudcsharp
 			switch (v.Id)
 			{
 			case Resource.Id.first_person_button:
-				mRenderer.SetFirstPersonView();
+				mRenderer.setFirstPersonView();
 				break;
 			case Resource.Id.third_person_button:
-				mRenderer.SetThirdPersonView();
+				mRenderer.setThirdPersonView();
 				break;
 			case Resource.Id.top_down_button:
-				mRenderer.SetTopDownView();
+				mRenderer.setTopDownView();
 				break;
 			default:
 				Log.Wtf(TAG, "Unrecognized button click.");
@@ -231,7 +231,7 @@ namespace com.projecttango.pointcloudcsharp
 
 		public override bool OnTouchEvent(MotionEvent args)
 		{
-			return mRenderer.OnTouchEvent(args);
+			return mRenderer.onTouchEvent(args);
 		}
 
 		private void SetUpExtrinsics()
@@ -326,7 +326,7 @@ namespace com.projecttango.pointcloudcsharp
 
 				float frameDelta = (mCurrentTimeStamp - mXyIjPreviousTimeStamp) * SECS_TO_MILLI;
 				mXyIjPreviousTimeStamp = mCurrentTimeStamp;
-				byte[] buffer = new byte[xyzIj.XyzCount * 3 * 4];
+                byte[] buffer = new byte[xyzIj.XyzCount * 3 * 4];
 				FileInputStream fileStream = new FileInputStream(xyzIj.XyzParcelFileDescriptor.FileDescriptor);
 				try
 				{
@@ -342,7 +342,8 @@ namespace com.projecttango.pointcloudcsharp
 				{
 					TangoPoseData pointCloudPose = mTango.GetPoseAtTime(mCurrentTimeStamp, framePairs[0]);
 
-					mRenderer.PointCloud.UpdatePoints(buffer, xyzIj.XyzCount);
+                //	mRenderer.PointCloud.UpdatePoints(buffer, xyzIj.XyzCount);
+                    mRenderer.PointCloud.UpdatePoints((Java.Nio.FloatBuffer)buffer);
 					mRenderer.ModelMatCalculator.updatePointCloudModelMatrix(pointCloudPose.GetTranslationAsFloats(), pointCloudPose.GetRotationAsFloats());
 					mRenderer.PointCloud.ModelMatrix = mRenderer.ModelMatCalculator.PointCloudModelMatrixCopy;
 				}
