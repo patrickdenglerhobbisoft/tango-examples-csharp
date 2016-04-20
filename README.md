@@ -1,4 +1,4 @@
 tango-examples-csharp
 =====================
 
-The samples from 
+SDK for Google's Tango in C#
